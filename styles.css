@@ -1,0 +1,26 @@
+.Reels{
+    float: left;
+    width: 30%;
+    height: 100%;
+    background-color: antiquewhite;
+    padding: 15px;     /*  Padding is used to create space around an element's content, inside of any defined borders. */
+}
+.Buttons{
+    float: right;
+    width: 65%;
+    height: 100%;
+    background-color: burlywood;
+}
+.Reels_Heading{
+    display: flex;
+    justify-content: center;
+    width :100%;
+    height:20%;
+    background-color: darkseagreen;
+    margin: 10px auto; /*margin : 0, it tells the browser that the top and bottom 
+    margin of the HTML element (here inner div) will be 0. Further, if we write 
+    the value of margin as margin : 0 auto, it commands the browser to automatically 
+    adjust the left and right margin to the same size according to the width of the HTML element. */ 
+    /* padding: 5px; */
+    font-size: 30px;
+}
