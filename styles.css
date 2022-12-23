@@ -3,13 +3,14 @@
     width: 30%;
     height: 100%;
     background-color: antiquewhite;
-    padding: 15px;     /*  Padding is used to create space around an element's content, inside of any defined borders. */
+    /* padding: 15px;      Padding is used to create space around an element's content, inside of any defined borders. */
 }
 .Buttons{
     float: right;
-    width: 65%;
+    width: 70%;
     height: 100%;
     background-color: burlywood;
+    align-content: center;
 }
 .Reels_Heading{
     display: flex;
@@ -23,4 +24,104 @@
     adjust the left and right margin to the same size according to the width of the HTML element. */ 
     /* padding: 5px; */
     font-size: 30px;
+}
+
+.layer{
+    width: 100%;
+    height: 23%; 
+    position: relative;
+}
+.Label_Layer{
+    width: 100%;
+    height: 5%;
+    position: relative;
+}
+.a1{
+    float:left;
+    width: 120px;
+    height: 120px;
+    border: 10px solid gold;
+    left: 70px;
+    top: 20px;
+    background-color: rgb(255, 255, 255);
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    position:absolute;
+}
+.a2{
+    float:left;
+    width: 120px;
+    height: 120px;
+    border: 10px solid gold;
+    background-color: rgb(255, 255, 255);
+    left: 340px;
+    top: 20px;
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    position:absolute;
+}
+.a3{
+    float:left;
+    width: 120px;
+    height: 120px;
+    border: 10px solid gold;
+    background-color: rgb(255, 255, 255);
+    left: 600px;
+    top: 20px;
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    position:absolute;
+}
+.b1{
+    left: 70px;
+    top: 0px;
+    width: 120px;
+    height:20px;
+    background-color: white;
+    position:absolute;
+    text-align: end;
+}
+.b2{
+    left: 340px;
+    top: 0px;
+    width: 120px;
+    height:20px;
+    background-color: white;
+    position:absolute;
+    text-align: end;
+}
+.b3{
+    left: 600px;
+    top: 0px;
+    width: 120px;
+    height:20px;;
+    background-color: white;
+    position:absolute;
+    text-align: end;
+}
+.Option_button{
+    width: 120px;
+    height: 120px;
+    font-size: 80px;
+
+}
+.Option_label{
+    width: 120px;
+    height: 25px;
+    margin-top: 10px;
+    margin-right: 20px;
+    background-color: white;
+}
+.Option_Cancel{
+    position: absolute;
+    background-color: crimson;
+    border-color: red;
+    width: 21px;
+    height: 21px;
 }
