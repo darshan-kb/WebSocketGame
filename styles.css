@@ -11,8 +11,10 @@
     height: 100%;
     background-color: burlywood;
     align-content: center;
+    
 }
 .Reels_Heading{
+    float:none;
     display: flex;
     justify-content: center;
     width :100%;
@@ -30,11 +32,13 @@
     width: 100%;
     height: 23%; 
     position: relative;
+    margin-top: 30px;
 }
 .Label_Layer{
     width: 100%;
     height: 5%;
     position: relative;
+    
 }
 .a1{
     float:left;
@@ -137,3 +141,45 @@
     width:10%;
     height:10%;
 }
+
+.doors {
+    float:none;
+    width: 100%;
+    height: 220px;
+}
+
+.door {
+    float: left;
+background: #fafafa;
+width: 130px;
+height: 160px;
+overflow: hidden;
+border-radius: 5px;
+margin: 0;
+margin-left: 16px;
+margin-top: 30px;
+}
+
+.boxes {
+    /* width: 5%;
+    height: 35%; */
+    
+    transition: transform 1s ease-in-out;
+  }
+  
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+  }
+
+  .butto{
+    float:none;
+    width:100%;
+    height: 20%;
+    margin-left: 120px;
+    margin-top: 30px;
+    /* position:relative; */
+  }
+
