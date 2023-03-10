@@ -7,6 +7,7 @@ const webSocketServer = require("websocket").server; //creating websocket server
 
 let connections = [];
 let count = 60;
+let spin = -1; //spinning time of the reel
 const httpserver = http.createServer((req, res) =>{
     console.log("we have received a request");
 })
@@ -25,6 +26,12 @@ for(let i=0;i<27;i++){
     //allData2[i]=0;
 }
 let addflag=true;
+let spinning=false;
+let res1 = [];
+let res2 = [];
+let queue = [];
+let slot1 = 0;
+let slot2 = 0;
 
 websocket.on("request", request=>{
     //console.log("hello");
@@ -51,6 +58,21 @@ websocket.on("request", request=>{
             
         }
 
+        
+        
+        
+
+        if(spin>=5 && spinning===true){
+            console.log("spinning....")
+            const payload={
+                "method": "result",
+                "res1": res1,
+                "res2": res2,
+                "spin": spin
+            }
+            connection.send(JSON.stringify(payload));
+        }
+
         if(request.method === "AddData" && addflag===false){
             const payload = {
                 "method" : "AccessDenied"
@@ -58,16 +80,31 @@ websocket.on("request", request=>{
         }
 
     }) 
+    sendQueue();
 
-})
-countDown();
-function countDown(){
     const initpayload={
         "method": "init"
     }
     connections.forEach(function(item){
         item.send(JSON.stringify(initpayload));
     });
+
+    if(count<0){
+        const countPayload ={
+            "method": "countdown",
+            "count": "0:0"
+        }
+        connections.forEach(function(item){
+            item.send(JSON.stringify(countPayload));
+        });
+    }
+
+})
+countDown();
+function countDown(){
+    addflag=true;
+    //spin=-1;
+    count=60;
     var x = setInterval(function(){
         console.log(count);
         
@@ -89,13 +126,49 @@ function countDown(){
         count-=1;
         if(count<0){
             
-            count=60;
+            
             clearInterval(x);
             resultSend();
+            spinning = true;
+            inSpinning();
             setTimeout(countDown,1000*60);
-            addflag=true;
+            
         }
     },1000);
+}
+
+function inSpinning(){
+    spin=30;
+    var x = setInterval(function(){
+        spin-=1;
+        console.log(spin);
+        
+        if(spin <= -3){
+            if(queue.length===5){
+                queue.shift();
+                queue.push({"firstTile": slot1,"secondTile": slot2});
+            }
+            else{
+                queue.push({"firstTile": slot1,"secondTile": slot2});
+            }
+            clearInterval(x);
+            sendQueue();
+        }
+    },1000);
+    
+}
+
+function sendQueue(){
+
+    
+
+    const payload = {
+        "method": "displayQueue",
+        "Queue": queue
+    }
+    connections.forEach(function(item){
+        item.send(JSON.stringify(payload));
+    });
 }
 
 function resultSend(){
@@ -107,18 +180,20 @@ function resultSend(){
     }
 
     for(let i=0;i<27;i++){
-        if(sum>allDataN[i]){
+        if(sum>=allDataN[i]){
             tmp[c++]=i;
         }
     }
 
     console.log(tmp);
     let winner = Math.floor(Math.random() * tmp.length);
-    let slot1 = winner%9;
-    let slot2 = parseInt(winner/9);
+    slot1 = winner%9;
+    slot2 = parseInt(winner/9);
 
-    let res1 = [];
-    let res2 = [];
+    
+
+    res1 = [];
+    res2 = [];
     c=0;
     for(let i=0;i<9;i++){
         if(i!=slot1){
@@ -142,7 +217,8 @@ function resultSend(){
     const payload ={
         "method": "result",
         "res1": res1,
-        "res2": res2
+        "res2": res2,
+        "spin": 30
     }
     connections.forEach(function(item){
         item.send(JSON.stringify(payload));
