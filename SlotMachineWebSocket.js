@@ -2,7 +2,7 @@ const http = require("http"); // creating http server
 const { send } = require("process");
 const app = require("express")();
 app.listen(9998, ()=>console.log("listening on http port 9998"));
-app.get("/",(req,res)=> res.sendFile(_dirname+"/index.html"));
+app.get("/",(req,res)=> res.sendFile(__dirname+"/SlotMachine_Front.html"));
 
 const webSocketServer = require("websocket").server; //creating websocket server this will give a class which contains all the events
 
@@ -43,6 +43,7 @@ websocket.on("request", request=>{
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
             addData(data);
+            console.log(allDataN);
         }    
 
         if(request.method === "AddData" && count<10){
@@ -142,7 +143,7 @@ function countDown(){
 }
 
 
-function sendQueue(){
+function sendQueue(){               //sending the queue to the client
     const payload = {
         "method": "displayQueue",
         "Queue": queue
@@ -152,7 +153,7 @@ function sendQueue(){
     });
 }
 
-function resultSend(){
+function resultSend(){              //sending the result of the current game
     let tmp = [];
     let c=0;
     let sum = 0;
