@@ -1,4 +1,5 @@
 const http = require("http"); // creating http server
+const { send } = require("process");
 const app = require("express")();
 app.listen(9998, ()=>console.log("listening on http port 9998"));
 app.get("/",(req,res)=> res.sendFile(_dirname+"/index.html"));
@@ -7,7 +8,7 @@ const webSocketServer = require("websocket").server; //creating websocket server
 
 let connections = [];
 let count = 60;
-let spin = -1; //spinning time of the reel
+
 const httpserver = http.createServer((req, res) =>{
     console.log("we have received a request");
 })
@@ -18,15 +19,11 @@ const websocket = new webSocketServer({ //It takes the JSON.
     "httpServer" : httpserver           //we have to pass httpserver object to it. Its just the handshake part. httpserver has the socket for the TCP connection
 })
 let allDataN = [];
-//let allData1 = [];
-//let allData2 = [];
+
 for(let i=0;i<27;i++){
     allDataN[i]=0;
-    //allData1[i]=0;
-    //allData2[i]=0;
+
 }
-let addflag=true;
-let spinning=false;
 let res1 = [];
 let res2 = [];
 let queue = [];
@@ -43,44 +40,22 @@ websocket.on("request", request=>{
         //console.log(`message - ${message.utf8Data}`);
         let request = JSON.parse(message.utf8Data);
         console.log(request);
-        if(request.method === "AddData" && addflag===true){
+        if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
-            
-            console.log(data[3]);
-            for(let i=0;i<9;i++){
-                let tmp=parseInt(data[i])
-                allDataN[i] += tmp;
-                allDataN[i+9] += tmp*2;
-                allDataN[i+18] += tmp*3;
-            }
-            
-                console.log(allDataN);
-            
-        }
+            addData(data);
+        }    
 
-        
-        
-        
-
-        if(spin>=5 && spinning===true){
-            console.log("spinning....")
-            const payload={
-                "method": "result",
-                "res1": res1,
-                "res2": res2,
-                "spin": spin
-            }
-            connection.send(JSON.stringify(payload));
-        }
-
-        if(request.method === "AddData" && addflag===false){
+        if(request.method === "AddData" && count<10){
             const payload = {
                 "method" : "AccessDenied"
             }
+            connections.forEach(function(item){
+                item.send(JSON.stringify(payload));
+            });
         }
 
     }) 
-    sendQueue();
+    sendQueue();                                    //when client connect for the first time then send the queue from the server
 
     const initpayload={
         "method": "init"
@@ -89,7 +64,7 @@ websocket.on("request", request=>{
         item.send(JSON.stringify(initpayload));
     });
 
-    if(count<0){
+    if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
         const countPayload ={
             "method": "countdown",
             "count": "0:0"
@@ -99,7 +74,28 @@ websocket.on("request", request=>{
         });
     }
 
-})
+    if(count < 0 && count>=-25){          // If the client connected in between the spinning then decrease the spin time so that result get print before -30;
+        const payload={
+            "method": "result",
+            "res1": res1,
+            "res2": res2,
+            "spin": (30+count)
+        }
+        connection.send(JSON.stringify(payload));
+    }
+
+});
+
+function addData(data){                         //Amount of money bet data add to array;
+    for(let i=0;i<9;i++){
+        let tmp=parseInt(data[i])
+        allDataN[i] += tmp;
+        allDataN[i+9] += tmp*2;
+        allDataN[i+18] += tmp*3;
+    }
+}
+
+
 countDown();
 function countDown(){
     addflag=true;
@@ -110,40 +106,24 @@ function countDown(){
         
         let min = parseInt(count/60);
         let sec = count%60;
-        const payload ={
-            "method": "countdown",
-            "count": min+":"+sec
-        }
-        connections.forEach(function(item){
-            item.send(JSON.stringify(payload));
-        });
-    
-        if(count<=10){
-            addflag=false;
-        }
-    
-    
-        count-=1;
-        if(count<0){
-            
-            
-            clearInterval(x);
-            resultSend();
-            spinning = true;
-            inSpinning();
-            setTimeout(countDown,1000*60);
-            
-        }
-    },1000);
-}
 
-function inSpinning(){
-    spin=30;
-    var x = setInterval(function(){
-        spin-=1;
-        console.log(spin);
+        if(count>=0){                               //send the time when it is greater than 0
+            const payload ={
+                "method": "countdown",
+                "count": min+":"+sec
+            }
+            connections.forEach(function(item){
+                item.send(JSON.stringify(payload));
+            });
+        }
         
-        if(spin <= -3){
+        count-=1;
+
+        if(count == -1){              //when countdown is equal to 0 send the result to the client, equal to will avoid sending the result again and again
+            resultSend();
+        }
+
+        if(count==-40){              //when the spinning is over send the queue to show the updated history of results
             if(queue.length===5){
                 queue.shift();
                 queue.push({"firstTile": slot1,"secondTile": slot2});
@@ -151,17 +131,18 @@ function inSpinning(){
             else{
                 queue.push({"firstTile": slot1,"secondTile": slot2});
             }
-            clearInterval(x);
+            //clearInterval(x);
             sendQueue();
         }
+
+        if(count<-60){          //when everthing is done reset the clock
+            count = 60;
+        }
     },1000);
-    
 }
 
+
 function sendQueue(){
-
-    
-
     const payload = {
         "method": "displayQueue",
         "Queue": queue
@@ -189,8 +170,6 @@ function resultSend(){
     let winner = Math.floor(Math.random() * tmp.length);
     slot1 = winner%9;
     slot2 = parseInt(winner/9);
-
-    
 
     res1 = [];
     res2 = [];
