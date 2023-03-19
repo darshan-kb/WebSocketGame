@@ -1,0 +1,362 @@
+
+.Reels{
+    float: left;
+    width: 30%;
+    height: 100%;
+    /* background-color: antiquewhite; */
+    background-color: #a203e1;
+    /* padding: 15px;      Padding is used to create space around an element's content, inside of any defined borders. */
+}
+.Buttons{
+    float:right;
+    width: 70%;
+    height: 100%;
+   /* background-color: burlywood;*/
+   background-color: #BC10FF;
+    align-content: center;
+    
+}
+.Countdown{
+    margin-left: 3%;
+    width :90%;
+    height:5%;
+    padding: 50px 0;
+    background-color: #fafafa; 
+    border: 10px solid #6f0499;
+    font-size: 50px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.Reels_Heading{
+    float:none;
+    display: flex;
+    justify-content: center;
+    width :93%;
+    height:20%;
+    /*background-color: darkseagreen;*/
+    background-color: #24E08A;
+    border: 10px solid #069462;
+    margin: 10px auto; /*margin : 0, it tells the browser that the top and bottom 
+    margin of the HTML element (here inner div) will be 0. Further, if we write 
+    the value of margin as margin : 0 auto, it commands the browser to automatically 
+    adjust the left and right margin to the same size according to the width of the HTML element. */ 
+    /* padding: 5px; */
+    font-size: 30px;
+}
+
+
+.slotQ{
+    /* background-color: chocolate; */
+    background-color: #f7e813;
+    border: 10px solid #cd0a68;
+    width:93%;
+    height:16%;
+    float:none;
+    /* margin-left: 10%; */
+    margin-top: 2%;
+    margin-bottom: 1%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.rewQ{
+    height:30%;
+    width: 40%;
+    float: right;
+    font-size:28px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    /* margin-right: 10px;
+    margin-top: 10px; */
+    
+}
+
+.digitQ{
+    height:30%;
+    width: 40%;
+    float:left;
+    margin-left: 10px;
+    font-size:28px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.Qslot{
+    height:70%;
+    width: 100%;
+    font-size: 50px;
+    float:inline-start;
+}
+.Qslots{
+    float:left;
+    width: 88px;
+    height: 88px;
+    border: 10px solid rgb(194, 8, 117);
+    
+    background-color: rgb(255, 255, 255);
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    
+    margin-left: 30px;
+    margin-right: 20px;
+    padding-top: 3px;
+}
+
+.layer1{
+    width: 100%;
+    height: 30%; 
+    margin-top: 5%;
+    float: none;
+    
+}
+.layer2{
+    width: 100%;
+    height: 30%; 
+    float: none;
+}
+.layer3{
+    width: 100%;
+    height: 30%; 
+    float: none;
+}
+.Label_Layer1{
+    width: 100%;
+    height: 3%;
+    float:none;
+    
+}
+.Label_Layer2{
+    width: 100%;
+    height: 3%;
+    float:none;
+    
+}
+.Label_Layer3{
+    width: 100%;
+    height: 3%;
+    float:none;
+    
+}
+.buttonbox{
+    float:left;
+    height:100%;
+    width: 30%;
+}
+.a1{
+    float:inline-start;
+    width: 88px;
+    height: 88px;
+    border: 10px solid gold;
+    
+    background-color: rgb(255, 255, 255);
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    float:left;
+    margin-left: 50px;
+    margin-right: 20px;
+}
+.a2{
+    float:left;
+    width: 88px;
+    height: 88px;
+    border: 10px solid gold;
+    background-color: rgb(255, 255, 255);
+    float:left;
+    margin-left: 50px;
+    margin-right: 20px;
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    
+}
+.a3{
+    float:left;
+    width: 88px;
+    height: 88px;
+    border: 10px solid gold;
+    background-color: rgb(255, 255, 255);
+    float:left;
+    margin-left: 50px;
+    margin-right: 20px;
+    /* margin-left: 120px;
+    margin-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px; */
+    
+}
+.b1{
+    
+    width: 108px;
+    height:20px;
+    
+    background-color: white;
+    float: left;
+    text-align: end;
+    margin-left: 50px;
+    margin-right: 20px;
+    margin-bottom: 5%;
+}
+.b2{
+    
+    width: 108px;
+    height:20px;
+    background-color: white;
+    float: left;
+    text-align: end;
+    margin-left: 50px;
+    margin-right: 20px;
+    margin-bottom: 5%;
+}
+.b3{
+    
+    width: 108px;
+    height:20px;;
+    background-color: white;
+    float: left;
+    text-align: end;
+    margin-left: 50px;
+    margin-right: 20px;
+    margin-bottom: 5%;
+}
+.Option_button{
+    width: 100%;
+    height: 100%;
+    /* font-size: 80px; */
+
+}
+.Option_label{
+    width: 120px;
+    height: 25px;
+    margin-top: 10px;
+    margin-right: 20px;
+    background-color: white;
+}
+.Option_Cancel{
+    
+    background-color: crimson;
+    border-color: red;
+    width:20px;
+    height:20px;
+    float:right;
+}
+
+.Label_div{        /* created by js */
+    width:100%;
+    height:100%;
+    /* text-align: left; */
+}
+
+.digit_text{
+    font-size: 28px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.doors {
+    float:none;
+    width: 100%;
+    height: 220px;
+    
+}
+
+.door {
+    float: left;
+background: #fafafa;
+width: 130px;
+height: 160px;
+overflow: hidden;
+border-radius: 5px;
+margin: 0;
+margin-left: 16px;
+margin-top: 30px;
+font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.boxes {
+    /* width: 5%;
+    height: 35%; */
+    
+    transition: transform 1s ease-in-out;
+  }
+  
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+  }
+
+  .butto{
+    float:none;
+    width:100%;
+    height: 20%;
+    margin-left: 120px;
+    margin-top: 30px;
+    /* position:relative; */
+  }
+
+.buttonlabel{
+    font-size: 45px;
+}
+
+.labelelement{
+    font-weight: bold;
+    text-align: center;
+    width:100%;
+    height: 100%;
+}
+
+.labeldiv{
+    width: 75px;
+    float:left;
+    display: block;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.AllOButton{
+    height: 65%;
+    width:60%;
+    margin-left: 20%;
+   
+}
+.RestButton{
+    width:100%;
+    height:10%;
+    margin-bottom: 2%;
+    /* align-items: center; */
+}
+.addButton{
+    align-items: center;
+}
+
+.addbuttondiv{
+    float: left;
+    margin-left: 30%;
+    width:20%;
+    height:100%;
+    
+}
+.reportbuttondiv{
+    float: left;
+    margin-left: 5px;
+    width:20%;
+    height:100%;
+}
+
+.add_button{
+    width:50%;
+    height: 50%;
+    font-size: 20px;
+    margin-left: 30%;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+.report_button{
+    width:50%;
+    height: 50%;
+    font-size: 20px;
+    
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+

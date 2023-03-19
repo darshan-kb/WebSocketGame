@@ -1,4 +1,6 @@
+//import express from "express";
 const http = require("http"); // creating http server
+const path = require('path');
 
 //mongodb
 const MongoClient = require('mongodb').MongoClient;
@@ -6,53 +8,29 @@ const uri = 'mongodb://localhost:27017';
 const db = 'slotmachine';
 let game=null;
 
-async function mongodbConnection() {
-    const client = new MongoClient(uri, { useUnifiedTopology: true});
-    try {
-      await client.connect();
-      const database = client.db(db);
-      game = database.collection('game');
-      //game_result = database.collection('game_result');
-    } catch (err) {
-      console.log(err.stack);
-    }
-    //await client.close();
-  }
-mongodbConnection();
-
-async function addPlayerDataToGame(playerdata){                 //updating the game.tickets to add the player data
-    try{
-        game.updateOne({"gameID" : gameID}, {$push: {"tickets": playerdata}});
-    }
-    catch(err){
-        console.log(err.stack)
-    }
-}
-
-async function insertGameDataToMongoDB(gamedata){                       //This is the skeleton of the game all the data will be store in the single game object no separate tabel
-    try{
-        game.insertOne(gamedata);
-    }
-    catch(err){
-        console.log(err.stack)
-    }
-}
-
-async function updateresultinDB(){
-    try{
-        game.updateOne({"gameID" : gameID}, {$set: {"slot1": slot1, "slot2": slot2}});
-    }
-    catch(err){
-        console.log(err.stack);
-    }
-}
-
-
 const { send } = require("process");
-const app = require("express")();
-app.listen(9998, ()=>console.log("listening on http port 9998"));
-app.get("/",(req,res)=> res.sendFile(__dirname+"/SlotMachine_Front.html"));
+const express = require("express");
+const app = express();
+app.set('view engine', 'ejs');
+app.set('views',path.join(__dirname,'./views'))
 
+app.use(express.static(path.join(__dirname,"./frontend")));
+
+app.listen(9998, ()=>console.log("listening on http port 9998"));
+app.get("/",(req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
+//app.get("/report",(req,res)=> res.sendFile(__dirname+"/report.html"));
+
+app.get("/report",(req, res)=>{
+    getcurrentgamedata().then(
+        (result)=>{
+            // console.log(result.length);
+            // console.log(result[0].ticketdata);
+            res.render('pages/report', {pageTitle: 'welcome', result: result, items:items});
+        }
+    );
+    
+})
+//app.use(express.static("frontend"));
 const webSocketServer = require("websocket").server; //creating websocket server this will give a class which contains all the events
 
 let connections = [];
@@ -128,6 +106,12 @@ function preprocessdata(data){
             }
             addPlayerDataToGame(dbpayload);
             addData(data);
+            let ticketpayload = {
+                "method": "newticket",
+                "ticketID": ticketID,
+                "ticketdata": pdata
+            }
+            findConnectionAndSend(request.clientID, ticketpayload);
             //console.log(allDataN);
         }    
 
@@ -358,3 +342,85 @@ function generateUUID() { // Public Domain/MIT
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
 }
+
+
+
+
+
+//connection setup with MongoDB
+async function mongodbConnection() {
+    const client = new MongoClient(uri, { useUnifiedTopology: true});
+    try {
+      await client.connect();
+      const database = client.db(db);
+      game = database.collection('game');
+      //game_result = database.collection('game_result');
+    } catch (err) {
+      console.log(err.stack);
+    }
+    //await client.close();
+  }
+mongodbConnection();
+
+//updating the game.tickets to add the player data
+async function addPlayerDataToGame(playerdata){                 
+    try{
+        game.updateOne({"gameID" : gameID}, {$push: {"tickets": playerdata}});
+    }
+    catch(err){
+        console.log(err.stack)
+    }
+}
+
+//This is the skeleton of the game all the data will be store in the single game object no separate tabel
+async function insertGameDataToMongoDB(gamedata){                       
+    try{
+        game.insertOne(gamedata);
+    }
+    catch(err){
+        console.log(err.stack)
+    }
+}
+
+//Update the game result in MongoDB
+async function updateresultinDB(){
+    try{
+        game.updateOne({"gameID" : gameID}, {$set: {"slot1": slot1, "slot2": slot2}});
+    }
+    catch(err){
+        console.log(err.stack);
+    }
+}
+
+//get current game data to render
+async function getcurrentgamedata(){
+    try{
+        const currdata = await game.find({"gameID": gameID});
+        //const data = await currdata.toArray();
+        let data = null;
+        if(await currdata.hasNext()) {
+            const recipe = await currdata.next();
+            data = recipe.tickets;
+          }
+
+        //let data = JSON.stringify(currdata);
+        console.log(data);
+        return data;
+    }
+    catch(err){
+        console.log(err.stack);
+    }
+}
+
+
+const items = [
+    '🍉',
+    '🍗',
+    '🍭',
+    '🍊',
+    '⚔️',
+    '🍹',
+    '🍿',
+    '🧨',
+    '☀️',
+];
