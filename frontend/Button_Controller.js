@@ -126,13 +126,14 @@ function delete_Button(button_param){
 }
 
 let clientID=null;
-let ws = new WebSocket("ws://192.168.1.4:9999");
+let ws = new WebSocket("ws://localhost:9999");
 ws.onopen = () => ws.send(JSON.stringify("Hello server"));
 ws.onclose = () => ws.send(JSON.stringify({"clientID" : clientID}));
 ws.onmessage = message => {                             //wiring of the event with server. so when server send
   const response = JSON.parse(message.data);          // some message this message function will be called
+  //const response = message.data8;
   const countdown = document.getElementById("count");
-  //console.log(response);
+  console.log(response);
                 
   if(response.method == "connect"){
     clientId = response.clientId;
@@ -158,6 +159,7 @@ ws.onmessage = message => {                             //wiring of the event wi
     //setInterval(1000*60,init());
   }
   if(response.method == "init"){
+    console.log("In init");
     clientID = response.clientID;
     init();
   }
@@ -216,7 +218,7 @@ ba1.addEventListener("click", e=>{
 
 const ba2 = document.getElementById("ba2");   
 ba2.addEventListener("click", e=>{
-  window.location.replace("http://192.168.1.4:9998/report");
+  window.location.replace("http://localhost:9998/report");
 });
 
 

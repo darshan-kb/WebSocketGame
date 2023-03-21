@@ -28,10 +28,11 @@
             </tr>
             <% for(var i=0; result!=null && i < result.length; i++) { %>
                 <tr>
-                    <td><%= result[i].ticketID %></td>
+                    <td><%= result[i].ticket.ticketID %></td>
+                    <td><%= result[i].timestamp.getHours() + ":" + result[i].timestamp.getMinutes()%></td>
                         <%for(var j=0; j< 9;j++){
-                            if(result[i].ticketdata.length>j && result[i].ticketdata[j]!=null){%>
-                                <td><%= result[i].ticketdata[j] %></td>
+                            if(result[i].ticket.ticketdata.length>j && result[i].ticket.ticketdata[j]!=null){%>
+                                <td><%= result[i].ticket.ticketdata[j] %></td>
                             <%}
                             else{%>
                                 <td> 0 </td>
