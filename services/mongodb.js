@@ -77,3 +77,69 @@ static async getcurrentgamedata(gameID,game){
     }
 }
 }
+
+
+// //connection setup with MongoDB
+// async function mongodbConnection() {
+//     const client = new MongoClient(uri, { useUnifiedTopology: true});
+//     try {
+//       await client.connect();
+//       const database = client.db(db);
+//       game = database.collection('game');
+//       //game_result = database.collection('game_result');
+//     } catch (err) {
+//       console.log(err.stack);
+//     }
+//     //await client.close();
+//   }
+// mongodbConnection();
+
+// //updating the game.tickets to add the player data
+// async function addPlayerDataToGame(playerdata){                 
+//     try{
+//         game.updateOne({"gameID" : gameID}, {$push: {"tickets": playerdata}});
+//     }
+//     catch(err){
+//         console.log(err.stack)
+//     }
+// }
+
+// //This is the skeleton of the game all the data will be store in the single game object no separate tabel
+// async function insertGameDataToMongoDB(gamedata){                       
+//     try{
+//         game.insertOne(gamedata);
+//     }
+//     catch(err){
+//         console.log(err.stack)
+//     }
+// }
+
+// //Update the game result in MongoDB
+// async function updateresultinDB(){
+//     try{
+//         game.updateOne({"gameID" : gameID}, {$set: {"slot1": slot1, "slot2": slot2}});
+//     }
+//     catch(err){
+//         console.log(err.stack);
+//     }
+// }
+
+// //get current game data to render
+// async function getcurrentgamedata(){
+//     try{
+//         const currdata = await game.find({"gameID": gameID});
+//         //const data = await currdata.toArray();
+//         let data = null;
+//         if(await currdata.hasNext()) {
+//             const recipe = await currdata.next();
+//             data = recipe.tickets;
+//           }
+
+//         //let data = JSON.stringify(currdata);
+//         console.log(data);
+//         return data;
+//     }
+//     catch(err){
+//         console.log(err.stack);
+//     }
+// }
