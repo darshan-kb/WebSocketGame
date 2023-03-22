@@ -7,25 +7,14 @@ const path = require('path');
 const result = require("./services/result.js");
 const payloadsend = require("./services/payloadsend.js");
 const queueops = require("./services/queueop.js");
-const mongodbop = require("./services/mongodb.js");
 const dotenv = require("dotenv");
 const db = require("./config/db.js");
 
-const mongoose = require("mongoose");
 
 dotenv.config();
 
 let count = 60;
 const QUEUESENDTIME = -40;
-//connectDB();
-
-//mongodb
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = 'mongodb://localhost:27017';
-// const db = 'slotmachine';
-//mongodbop.mongodbConnection();
-//game.insertOne({"hello": "world"});
-//console.log(game);
 
 const { send } = require("process");
 const express = require("express");
@@ -43,14 +32,6 @@ db.connect().then(()=>{
 })
 
 
-
-// .then(() => {
-//     console.log('connected to MongoDB');
-//     
-// }).catch((err)=>{
-//     console.error(err);
-// })
-
 app.get("/",(req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
 
 
@@ -58,7 +39,7 @@ app.get("/report", (req, res)=>{
     
     db.finddata().then(
         (result)=>{
-            res.render('pages/report', {pageTitle: 'welcome', result: result, items:items});
+            res.render('pages/report', {pageTitle: 'welcome', result: result, items:items, prize:prize});
         }
     );
     
@@ -83,8 +64,8 @@ let allDataN = [];
 let res1 = [];
 let res2 = [];
 let queue = [];
-let slot1 = 0;
-let slot2 = 0;
+let slot1 = -1;
+let slot2 = -1;
 let gameID = null;
 
 websocket.on("request", request=>{
@@ -112,11 +93,12 @@ websocket.on("request", request=>{
         console.log(request);
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
-            let pdata = tpdata.preprocessdata(data);
-            let ticketID = uuid.generateUUID();
-            db.addticket(apl.all_db_ticket_payload(clientID,ticketID,pdata),gameID);
-            allDataN = tpdata.addData(data);
-            ticketpayload = apl.ticket_response_payload(ticketID,pdata);
+            //let pdata = tpdata.preprocessdata(data);
+            let ticketID = Date.now();
+            db.addticket(apl.all_db_ticket_payload(clientID,ticketID,data),gameID);
+            tpdata.addData(data,allDataN);
+            console.log(allDataN);
+            ticketpayload = apl.ticket_response_payload(ticketID,data);
             payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
         }    
 
@@ -157,6 +139,7 @@ function countDown(){
 
         //gameID will be generated once the game is started
         if(count==60){
+            clearData();
             gameID = uuid.generateUUID();
             db.addgame(apl.game_start_data(gameID,slot1,slot2));
             //game.insertOne(apl.game_start_data(gameID,slot1,slot2));
@@ -180,7 +163,7 @@ function countDown(){
             res2 = res.res2;
             slot1 = res.slot1;
             slot2 = res.slot2;
-            clearData();
+            
         }
 
         if(count===QUEUESENDTIME){              //when the spinning is over send the queue to show the updated history of results
@@ -199,6 +182,8 @@ function clearData(){
     for(let i=0;i<27;i++){
         allDataN[i]=0;
     }
+    slot1=-1;
+    slot2=-1;
 }
 
 
@@ -213,3 +198,5 @@ const items = [
     '🧨',
     '☀️',
 ];
+
+const prize=[0,8,16,24];

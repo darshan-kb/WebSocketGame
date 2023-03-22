@@ -143,3 +143,13 @@ static async getcurrentgamedata(gameID,game){
 //         console.log(err.stack);
 //     }
 // }
+
+//connectDB();
+
+//mongodb
+// const MongoClient = require('mongodb').MongoClient;
+// const uri = 'mongodb://localhost:27017';
+// const db = 'slotmachine';
+//mongodbop.mongodbConnection();
+//game.insertOne({"hello": "world"});
+//console.log(game);

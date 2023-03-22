@@ -56,18 +56,18 @@ async function finddata(){
     try{
         const start = new Date().toDateString();
         //console.log(start);
-        let todaydata = await ticketModel.find({timestamp:{$gte:start}});
+        let todaydata = await ticketModel.find({timestamp:{$gte:start}}).sort({timestamp:-1}).limit(5);
         //console.log(todaydata);
         let todaytickets = [];
         for(var i of todaydata){
-            for(j of i.ticket){
-                todaytickets.push({ticket: j, timestamp:i.timestamp});
+            for(var j=i.ticket.length-1;j>=0;j--){
+                todaytickets.push({ticket: i.ticket[j], timestamp:i.timestamp, slot1:i.slot1, slot2:i.slot2});
             }
         }
         return todaytickets;
     }
     catch(err){
-
+        console.log(err);
     }
 }
 

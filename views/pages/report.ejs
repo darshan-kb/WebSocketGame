@@ -22,21 +22,30 @@
         <table class="table table-striped">
             <tr>
                 <th style="font-size: xx-large;"> Ticket ID</th>
+                <th style="font-size: xx-large;"> Time</th>
+                
                 <%for(var i=1;i<=9;i++){%>
                     <th style="font-size: xx-large;"> <%= items[i-1] +" "+i  %> </th>
                 <%}%>
+                <th style="font-size: xx-large;"> Prize</th>
             </tr>
             <% for(var i=0; result!=null && i < result.length; i++) { %>
                 <tr>
                     <td><%= result[i].ticket.ticketID %></td>
                     <td><%= result[i].timestamp.getHours() + ":" + result[i].timestamp.getMinutes()%></td>
-                        <%for(var j=0; j< 9;j++){
+                        <% let sum=0;
+                        for(var j=0; j< 9;j++){
+                            
                             if(result[i].ticket.ticketdata.length>j && result[i].ticket.ticketdata[j]!=null){%>
                                 <td><%= result[i].ticket.ticketdata[j] %></td>
-                            <%}
+                                <%if(result[i].slot1 ==j && result[i].ticket.ticketdata[j] !=0 ){
+                                    sum=prize[result[i].slot2+1]*result[i].ticket.ticketdata[j];
+                                }
+                            }
                             else{%>
                                 <td> 0 </td>
                             <%}}%>
+                            <td style="font-weight: bold;"><%= sum %></td>
                </tr>
             <% } %>
             </table>

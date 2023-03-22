@@ -126,7 +126,7 @@ function delete_Button(button_param){
 }
 
 let clientID=null;
-let ws = new WebSocket("ws://localhost:9999");
+let ws = new WebSocket("ws://192.168.1.8:9999");
 ws.onopen = () => ws.send(JSON.stringify("Hello server"));
 ws.onclose = () => ws.send(JSON.stringify({"clientID" : clientID}));
 ws.onmessage = message => {                             //wiring of the event with server. so when server send
@@ -340,12 +340,27 @@ const items = [
 //print command
   function printTicket(ticket) {
     //console.log(ticket.ticketID);
-    let str = ticket.ticketID+"\n";
+    let str = "ticketID"+" "+ticket.ticketID+"\n";
     for(var i=0;i<ticket.ticketdata.length;i++){
-      if(ticket.ticketdata[i]!=null){
+      if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0){
         str+= i+" : "+ticket.ticketdata[i]+"\n";
       }
     }
+
+    try{
+      fetch('http://127.0.0.1:5000/', {
+          mode: 'no-cors',
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ "text": str })
+          }).then(response => {console.log(response)}).then(data =>{console.log(data)});
+  }
+  catch(err){
+      console.log(err);
+  }
 
   //   fetch('http://192.168.1.9:7060/Print', {
   //   method: 'POST',

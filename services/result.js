@@ -21,7 +21,7 @@ module.exports = class result {
         let c=0;
         let sum = 0;
         for(let i=0;i<9;i++){
-            sum+=allDataN[i];
+            sum+=Math.floor(allDataN[i]/8);
         }
 
         for(let i=0;i<27;i++){
@@ -31,10 +31,10 @@ module.exports = class result {
         }
 
         console.log(tmp);
-        let winner = Math.floor(Math.random() * tmp.length);
+        let winner = tmp[Math.floor(Math.random() * tmp.length)];
         slot1 = winner%9;
         slot2 = parseInt(winner/9);
-
+        console.log("sum = "+sum+" prize : "+allDataN[winner]);
         res1 = [];
         res2 = [];
         c=0;
