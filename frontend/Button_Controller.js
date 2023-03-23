@@ -126,7 +126,7 @@ function delete_Button(button_param){
 }
 
 let clientID=null;
-let ws = new WebSocket("ws://192.168.1.8:9999");
+let ws = new WebSocket("ws://localhost:9999");
 ws.onopen = () => ws.send(JSON.stringify("Hello server"));
 ws.onclose = () => ws.send(JSON.stringify({"clientID" : clientID}));
 ws.onmessage = message => {                             //wiring of the event with server. so when server send
