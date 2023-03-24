@@ -9,6 +9,7 @@ const payloadsend = require("./services/payloadsend.js");
 const queueops = require("./services/queueop.js");
 const dotenv = require("dotenv");
 const db = require("./config/db.js");
+const appRoutes = require('./routes/appRoutes');
 
 
 dotenv.config();
@@ -23,6 +24,8 @@ app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'./views'))
 
 app.use(express.static(path.join(__dirname,"./frontend")));
+app.use(express.json());
+app.use(appRoutes);
 
 db.connect().then(()=>{
     console.log('Mongodb connected');
@@ -35,15 +38,6 @@ db.connect().then(()=>{
 app.get("/",(req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
 
 
-app.get("/report", (req, res)=>{
-    
-    db.finddata().then(
-        (result)=>{
-            res.render('pages/report', {pageTitle: 'welcome', result: result, items:items, prize:prize});
-        }
-    );
-    
-})
 //app.use(express.static("frontend"));
 const webSocketServer = require("websocket").server; //creating websocket server this will give a class which contains all the events
 
