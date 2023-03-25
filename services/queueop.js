@@ -2,15 +2,13 @@ const apl = require("./allpayload.js");
 const payloadsend = require("./payloadsend.js")
 
 module.exports = class QueueOps{
-    static sendQueue(queue, slot1, slot2,connections){               //sending the queue to the client
+    static sendQueue(queue, slot1, slot2,connections,timestamp){               //sending the queue to the client
         
         if(queue.length===5){
             queue.shift();
-            queue.push({"firstTile": slot1,"secondTile": slot2});
         }
-        else{
-            queue.push({"firstTile": slot1,"secondTile": slot2});
-        }
+    
+        queue.push({"firstTile": slot1,"secondTile": slot2,"timestamp":timestamp.getHours() + ":" + timestamp.getMinutes()});
         
 
         

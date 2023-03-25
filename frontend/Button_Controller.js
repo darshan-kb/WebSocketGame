@@ -165,6 +165,7 @@ ws.onmessage = message => {                             //wiring of the event wi
   }
   if(response.method == "displayQueue"){
     queue = response.Queue;
+    console.log(queue);
     renderQueue(queue);
   }
 
@@ -184,12 +185,14 @@ function renderQueue(queue){
   let i = queue.length;
     for(q of queue){
       console.log(queue);
+      let timediv = document.getElementById("tq"+i);
       let tmpdiv = document.getElementById("q"+i);
       let digdiv = document.getElementById("dq"+i);
       let rewdiv = document.getElementById("rq"+i);
       tmpdiv.innerHTML = items[q.firstTile];
       digdiv.innerHTML = q.firstTile+1;
       rewdiv.innerHTML = "X"+(q.secondTile+1);
+      timediv.innerHTML = q.timestamp;
       //console.log(q.firstTile+1);
       //digdiv.innerHTML = 'Hello';
       i--;

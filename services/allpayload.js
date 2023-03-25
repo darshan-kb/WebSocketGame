@@ -67,11 +67,12 @@ module.exports = class AllPayload{
         return respayload;
     }
     //create a payload to store in the Database at the start of the game
-    static game_start_data(gameID,slot1,slot2){
+    static game_start_data(gameID,slot1,slot2,timestamp){
         const GameStartData = {
             "gameID" : gameID,
             "slot1" : slot1,
             "slot2" : slot2,
+            "timestamp": timestamp,
             "tickets" : []
         }
         return GameStartData;

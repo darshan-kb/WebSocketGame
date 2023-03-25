@@ -18,6 +18,7 @@ dotenv.config();
 
 let count = 60;
 const QUEUESENDTIME = -40;
+let GAME_TIMESTAMP = new Date();
 
 const { send } = require("process");
 const express = require("express");
@@ -141,7 +142,9 @@ function countDown(){
         if(count==60){
             clearData();
             gameID = uuid.generateUUID();
-            db.addgame(apl.game_start_data(gameID,slot1,slot2));
+            GAME_TIMESTAMP = new Date();
+            let game_data = db.addgame(apl.game_start_data(gameID,slot1,slot2,GAME_TIMESTAMP));
+            
             //game.insertOne(apl.game_start_data(gameID,slot1,slot2));
         }
         console.log(count);
@@ -167,7 +170,7 @@ function countDown(){
         }
 
         if(count===QUEUESENDTIME){              //when the spinning is over send the queue to show the updated history of results
-            queueops.sendQueue(queue,slot1,slot2,connections);
+            queueops.sendQueue(queue,slot1,slot2,connections,GAME_TIMESTAMP);
             db.updateresult(gameID,slot1,slot2);
         }
 
