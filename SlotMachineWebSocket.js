@@ -143,7 +143,7 @@ function countDown(){
             clearData();
             gameID = uuid.generateUUID();
             GAME_TIMESTAMP = new Date();
-            let game_data = db.addgame(apl.game_start_data(gameID,slot1,slot2,GAME_TIMESTAMP));
+            db.addgame(apl.game_start_data(gameID,slot1,slot2,GAME_TIMESTAMP));
             
             //game.insertOne(apl.game_start_data(gameID,slot1,slot2));
         }

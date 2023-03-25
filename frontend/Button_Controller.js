@@ -146,7 +146,14 @@ ws.onmessage = message => {                             //wiring of the event wi
   }
 
   if(response.method == "countdown"){
-    countdown.innerHTML = response.count;
+    let count = response.count;
+    countdown.innerHTML = count;
+    if(count === "0:10"){
+      drawclose();
+    }
+    // else{
+    //   drawclose(false);
+    // }
   }
 
   if(response.method == "result"){      //spin the slots
@@ -159,7 +166,8 @@ ws.onmessage = message => {                             //wiring of the event wi
     //setInterval(1000*60,init());
   }
   if(response.method == "init"){
-    console.log("In init");
+    //console.log("In init");
+    
     clientID = response.clientID;
     init();
   }
@@ -180,7 +188,19 @@ ws.onmessage = message => {                             //wiring of the event wi
 //   }
 //   ws.send(JSON.stringify(payload));
 // }
-
+function drawclose(){
+  let draw = document.getElementById("drawclosed");
+  draw.innerHTML = "Draw Closed!";
+  let cout = 5;
+  const setInt = setInterval(function(){
+    if(cout<=0){
+      draw.innerHTML="";
+      clearInterval(setInt);
+    }
+    cout--;
+  },1000)
+  
+}
 function renderQueue(queue){
   let i = queue.length;
     for(q of queue){
@@ -245,6 +265,7 @@ const items = [
 
   function init(firstInit = true, groups = 1, duration = 1) {
     let count=0;
+    
     for (const door of doors) {
       if (firstInit) {
         door.dataset.spinned = '0';
