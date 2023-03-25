@@ -10,6 +10,8 @@ const queueops = require("./services/queueop.js");
 const dotenv = require("dotenv");
 const db = require("./config/db.js");
 const appRoutes = require('./routes/appRoutes');
+const cookieParser = require('cookie-parser');
+const {requireAuth} = require('./middleware/authMiddleware');
 
 
 dotenv.config();
@@ -24,8 +26,10 @@ app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'./views'))
 
 app.use(express.static(path.join(__dirname,"./frontend")));
+app.use(express.static(path.join(__dirname,"./public")));
 app.use(express.json());
-app.use(appRoutes);
+
+app.use(cookieParser());
 
 db.connect().then(()=>{
     console.log('Mongodb connected');
@@ -34,8 +38,8 @@ db.connect().then(()=>{
     console.error(err);
 })
 
-
-app.get("/",(req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
+app.use(appRoutes);
+app.get("/", requireAuth, (req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
 
 
 //app.use(express.static("frontend"));
@@ -79,6 +83,8 @@ websocket.on("request", request=>{
             i++;
         }
     });
+
+    
 
 
 

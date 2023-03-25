@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title><%= pageTitle %></title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            /* tr {
+                border: 1px solid black;
+                padding: 5px;
+            }
+            td {
+                border: 1px solid black;
+                padding: 5px;
+            }*/
+            /* th {
+
+                font-size: medium;
+            } */
+        </style>
+    </head>
+    <body>
+
+        <h1>Report</h1>
+        <table class="table table-striped">
+            <tr>
+                <th style="font-size: xx-large;"> Ticket ID</th>
+                <th style="font-size: xx-large;"> Time</th>
+                
+                <%for(var i=1;i<=9;i++){%>
+                    <th style="font-size: xx-large;"> <%= items[i-1] +" "+i  %> </th>
+                <%}%>
+                <th style="font-size: xx-large;"> Prize</th>
+            </tr>
+            <% for(var i=0; result!=null && i < result.length; i++) { %>
+                <tr>
+                    <td><%= result[i].ticket.ticketID %></td>
+                    <td><%= result[i].timestamp.getHours() + ":" + result[i].timestamp.getMinutes()%></td>
+                        <% let sum=0;
+                        for(var j=0; j< 9;j++){
+                            
+                            if(result[i].ticket.ticketdata.length>j && result[i].ticket.ticketdata[j]!=null){%>
+                                <td><%= result[i].ticket.ticketdata[j] %></td>
+                                <%if(result[i].slot1 ==j && result[i].ticket.ticketdata[j] !=0 ){
+                                    sum=prize[result[i].slot2+1]*result[i].ticket.ticketdata[j];
+                                }
+                            }
+                            else{%>
+                                <td> 0 </td>
+                            <%}}%>
+                            <td style="font-weight: bold;"><%= sum %></td>
+               </tr>
+            <% } %>
+            </table>
+            <div>
+                <div class="backbutton">
+                    <button class="back_button" id="bb">Back</button>
+                </div>
+            </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    const bb = document.getElementById("bb");   
+    bb.addEventListener("click", e=>{
+        window.location.replace("http://localhost:9998/");
+    });
+</script>
+</html>
