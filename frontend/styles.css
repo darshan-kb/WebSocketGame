@@ -4,7 +4,8 @@
     width: 30%;
     height: 100%;
     /* background-color: antiquewhite; */
-    background-color: #a203e1;
+    /* background-color: #a203e1; */
+    background-color: #f05d23;
     /* padding: 15px;      Padding is used to create space around an element's content, inside of any defined borders. */
 }
 .Buttons{
@@ -12,7 +13,8 @@
     width: 70%;
     height: 100%;
    /* background-color: burlywood;*/
-   background-color: #BC10FF;
+   /* background-color: #BC10FF; */
+   background-color: #c5d86d;
     align-content: center;
     
 }
@@ -46,8 +48,10 @@
     width :93%;
     height:20%;
     /*background-color: darkseagreen;*/
-    background-color: #24E08A;
-    border: 10px solid #069462;
+    background-color: #f7f7f2;
+    /* border: 10px solid #069462; */
+    border: 10px solid #6f0499;
+    /* color:#fafafa; */
     margin: 10px auto; /*margin : 0, it tells the browser that the top and bottom 
     margin of the HTML element (here inner div) will be 0. Further, if we write 
     the value of margin as margin : 0 auto, it commands the browser to automatically 
@@ -171,6 +175,7 @@
     width: 88px;
     height: 88px;
     border: 10px solid gold;
+    /* border:10px solid #900048; */
     
     background-color: rgb(255, 255, 255);
     /* margin-left: 120px;
