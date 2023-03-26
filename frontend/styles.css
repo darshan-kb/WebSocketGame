@@ -5,7 +5,7 @@
     height: 100%;
     /* background-color: antiquewhite; */
     /* background-color: #a203e1; */
-    background-color: #f05d23;
+    background: radial-gradient(circle at 10% 20%, rgb(255, 197, 61) 0%, rgb(255, 94, 7) 90%);
     /* padding: 15px;      Padding is used to create space around an element's content, inside of any defined borders. */
 }
 .Buttons{
@@ -14,17 +14,19 @@
     height: 100%;
    /* background-color: burlywood;*/
    /* background-color: #BC10FF; */
-   background-color: #c5d86d;
+   background: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147));
     align-content: center;
     
 }
+
 .Countdown{
     margin-left: 3%;
     width :90%;
     height:5%;
     padding: 50px 0;
     background-color: #fafafa; 
-    border: 10px solid #6f0499;
+    border: 10px solid #05004e;
+    border-radius: 30px;
     font-size: 50px;
     text-align: center;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -50,7 +52,8 @@
     /*background-color: darkseagreen;*/
     background-color: #f7f7f2;
     /* border: 10px solid #069462; */
-    border: 10px solid #6f0499;
+    border: 10px solid #ff0000;
+    border-radius: 25px;
     /* color:#fafafa; */
     margin: 10px auto; /*margin : 0, it tells the browser that the top and bottom 
     margin of the HTML element (here inner div) will be 0. Further, if we write 
@@ -66,10 +69,11 @@
 }
 .slotQ{
     /* background-color: chocolate; */
-    background-color: #f7e813;
-    border: 10px solid #cd0a68;
+    background: linear-gradient(109.6deg, rgb(255, 219, 47) 11.2%, rgb(244, 253, 0) 100.2%);
+    border: 10px solid #ff5722;
     width:93%;
-    height:18%;
+    height:124px;
+    border-radius: 25px;
     float:none;
     /* margin-left: 10%; */
     margin-top: 2%;
@@ -117,8 +121,8 @@
     float:left;
     width: 102px;
     height: 102px;
-    border: 10px solid rgb(194, 8, 117);
-    
+    border: 10px solid #ff0000;
+    border-radius: 15px;
     background-color: rgb(255, 255, 255);
     /* margin-left: 120px;
     margin-right: 10px;
@@ -175,6 +179,7 @@
     width: 88px;
     height: 88px;
     border: 10px solid gold;
+    
     /* border:10px solid #900048; */
     
     background-color: rgb(255, 255, 255);
