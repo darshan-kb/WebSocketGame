@@ -14,7 +14,7 @@
     height: 100%;
    /* background-color: burlywood;*/
    /* background-color: #BC10FF; */
-   background: linear-gradient(135deg, rgb(252, 207, 49) 10%, rgb(245, 85, 85) 100%);
+   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     align-content: center;
     
 }
@@ -119,11 +119,13 @@
 }
 .Qslots{
     float:left;
-    width: 102px;
-    height: 102px;
-    border: 10px solid #ff0000;
+    width: 109px;
+    height: 109px;
+    background: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
     border-radius: 15px;
     background-color: rgb(255, 255, 255);
+    border:7px solid #ff0000;
+    
     /* margin-left: 120px;
     margin-right: 10px;
     margin-top: 50px;
