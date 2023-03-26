@@ -7,10 +7,10 @@ module.exports = class AddTempData{
         // for(let i=0;i<27;i++){
         //     allDataN[i]=0;
         // }                   
-        for(let i=0;i<9;i++){
-            allDataN[i] += data[i]*8;
-            allDataN[i+9] += data[i]*16;
-            allDataN[i+18] += data[i]*24;
+        for(let i=0;i<12;i++){
+            allDataN[i] += data[i]*10;
+            allDataN[i+12] += data[i]*20;
+            allDataN[i+24] += data[i]*30;
         }
         //return allDataN;
     }

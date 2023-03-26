@@ -182,7 +182,7 @@ function countDown(){
 
 
 function clearData(){
-    for(let i=0;i<27;i++){
+    for(let i=0;i<36;i++){
         allDataN[i]=0;
     }
     slot1=-1;
@@ -194,12 +194,15 @@ const items = [
     '🍉',
     '🍗',
     '🍭',
+    '🍆',
     '🍊',
     '⚔️',
     '🍹',
+    '🌽',
     '🍿',
     '🧨',
     '☀️',
-];
+    '🍠',
+  ];
 
-const prize=[0,8,16,24];
+const prize=[0,10,20,30];

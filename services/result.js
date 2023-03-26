@@ -20,11 +20,11 @@ module.exports = class result {
         let tmp = [];
         let c=0;
         let sum = 0;
-        for(let i=0;i<9;i++){
-            sum+=Math.floor(allDataN[i]/8);
+        for(let i=0;i<12;i++){
+            sum+=Math.floor(allDataN[i]/10);
         }
 
-        for(let i=0;i<27;i++){
+        for(let i=0;i<36;i++){
             if(sum>=allDataN[i]){
                 tmp[c++]=i;
             }
@@ -32,13 +32,13 @@ module.exports = class result {
 
         console.log(tmp);
         let winner = tmp[Math.floor(Math.random() * tmp.length)];
-        slot1 = winner%9;
-        slot2 = parseInt(winner/9);
+        slot1 = winner%12;
+        slot2 = parseInt(winner/12);
         console.log("sum = "+sum+" prize : "+allDataN[winner]);
         res1 = [];
         res2 = [];
         c=0;
-        for(let i=0;i<9;i++){
+        for(let i=0;i<12;i++){
                 if(i!=slot1){
                 res1[c++] = i;
             }
@@ -71,7 +71,7 @@ module.exports = class result {
     }
 
     static clearData(){
-        for(let i=0;i<27;i++){
+        for(let i=0;i<36;i++){
             allDataN[i]=0;
         }
         return allDataN

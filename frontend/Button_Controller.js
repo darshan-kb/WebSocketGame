@@ -1,8 +1,8 @@
-value_arr = [10,50,100,200,500,1000];
-button_val = [-1,-1,-1,-1,-1,-1,-1,-1,-1];
+value_arr = [10,20,50,100,200,500,1000];
+button_val = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
 active_button=0;
-button_div = ["d1","d2","d3","d4","d5","d6","d7","d8","d9"];
-points = [0,0,0,0,0,0,0,0,0];
+button_div = ["d1","d2","d3","d4","d5","d6","d7","d8","d9","d10","d11","d12"];
+points = [0,0,0,0,0,0,0,0,0,0,0,0];
 
 let res1=[];
 let res2=[];
@@ -47,6 +47,18 @@ const p9 = document.getElementById("p9");
 p9.addEventListener('click', option_Button);
 p9.myParam = "p9";
 
+const p10 = document.getElementById("p10");
+p10.addEventListener('click', option_Button);
+p10.myParam = "p10";
+
+const p11 = document.getElementById("p11");
+p11.addEventListener('click', option_Button);
+p11.myParam = "p11";
+
+const p12 = document.getElementById("p12");
+p12.addEventListener('click', option_Button);
+p12.myParam = "p12";
+
 // event listener for delete button
 
 const x1 = document.getElementById("x1");
@@ -85,12 +97,24 @@ const x9 = document.getElementById("x9");
 x9.addEventListener('click', delete_Button);
 x9.myParam = "x9";
 
+const x10 = document.getElementById("x10");
+x10.addEventListener('click', delete_Button);
+x10.myParam = "x10";
 
+const x11 = document.getElementById("x11");
+x11.addEventListener('click', delete_Button);
+x11.myParam = "x11";
+
+const x12 = document.getElementById("x12");
+x12.addEventListener('click', delete_Button);
+x12.myParam = "x12";
+
+//extract the button number. change the value of the button_val to index of val_arr. if same button press again increase the index
 function option_Button(button_param){
 
     button_id = button_param.currentTarget.myParam;
     Option_id = document.getElementById(button_id);
-    idx = parseInt(Option_id.id.charAt(1));
+    idx = parseInt(Option_id.id.substring(1));
     idx-=1;
     
     active_button++;
@@ -117,7 +141,7 @@ function displayLabel(idx, val){
 function delete_Button(button_param){
     button_id = button_param.currentTarget.myParam;
     Option_id = document.getElementById(button_id);
-    idx = parseInt(Option_id.id.charAt(1));
+    idx = parseInt(Option_id.id.substring(1));
     idx-=1;
     const lb_div = document.getElementById(button_div[idx]);
     lb_div.innerHTML=``;
@@ -141,7 +165,7 @@ ws.onmessage = message => {                             //wiring of the event wi
   }
 
   if(response.method == "newticket"){
-    printTicket(response);
+    //printTicket(response);
     console.log("received ticket! ")
   }
 
@@ -190,7 +214,7 @@ ws.onmessage = message => {                             //wiring of the event wi
 // }
 function drawclose(){
   let draw = document.getElementById("drawclosed");
-  draw.innerHTML = "Draw Closed!";
+  draw.innerHTML = "DRAW CLOSED!";
   let cout = 5;
   const setInt = setInterval(function(){
     if(cout<=0){
@@ -211,7 +235,7 @@ function renderQueue(queue){
       let rewdiv = document.getElementById("rq"+i);
       tmpdiv.innerHTML = items[q.firstTile];
       digdiv.innerHTML = q.firstTile+1;
-      rewdiv.innerHTML = "X"+(q.secondTile+1);
+      rewdiv.innerHTML = prizearr[q.secondTile];
       timediv.innerHTML = q.timestamp;
       //console.log(q.firstTile+1);
       //digdiv.innerHTML = 'Hello';
@@ -227,14 +251,15 @@ ba1.addEventListener("click", e=>{
     "dataArr": points,
     "clientID": clientID
   }
+  console.log(points)
 
-  for(let i=0;i<9;i++){
+  for(let i=0;i<12;i++){
     let lb_div = document.getElementById(button_div[i]);
     lb_div.innerHTML=``;
     button_val[i]=-1;
   }
   ws.send(JSON.stringify(payload));
-  for(let i=0;i<9;i++){
+  for(let i=0;i<12;i++){
     points[i]=0;
   }  
 });
@@ -251,13 +276,17 @@ const items = [
     '🍉',
     '🍗',
     '🍭',
+    '🍆',
     '🍊',
     '⚔️',
     '🍹',
+    '🌽',
     '🍿',
     '🧨',
     '☀️',
+    '🍠',
   ];
+  const prizearr = ['N','X2','X3'];
   const doors = document.querySelectorAll('.door');
   
   //document.querySelector('#spinner').addEventListener('click', spin);
@@ -284,18 +313,18 @@ const items = [
         }
         let tmp=[];
         if(count==0){                 //First tile
-          for(let i=0;i<9*20;i++){
-            tmp[i] = items[res1[i%9]];
+          for(let i=0;i<12*20;i++){
+            tmp[i] = items[res1[i%12]];
           }
         }
         else if(count==1){          //Second tile
-          for(let i=0;i<9*20;i++){
-            tmp[i] = res1[i%9]+1;
+          for(let i=0;i<12*20;i++){
+            tmp[i] = res1[i%12]+1;
           }
         }
         else{                       //Third tile
           for(let i=0;i<9*20;i++){
-            tmp[i] = res2[i%3]+1;
+            tmp[i] = prizearr[res2[i%3]];
           }
         }
 
