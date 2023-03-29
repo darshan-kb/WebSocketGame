@@ -9,6 +9,7 @@
         <%- include('partials/header'); -%>
         <form>
             <h2>Sign up</h2>
+            <div class="email signup"></div>
             <label for="email">Email</label>
             <input type="text" name="email" required/>
             <div class="email error"></div>
@@ -21,6 +22,7 @@
     <script>
         const form = document.querySelector("form");
         const emailError = document.querySelector('.email.error');
+        const emailsignup = document.querySelector('.email.signup');
         const passwordError = document.querySelector('.password.error');
 
         form.addEventListener('submit', async (e) => {
@@ -43,6 +45,9 @@
                 if(data.errors){
                     emailError.textContent = data.errors.email;
                     passwordError.textContent = data.errors.password;
+                }
+                if(data.signup){
+                    emailsignup.textContent = data.signup;
                 }
                 if(data.user){
                     location.assign('/')

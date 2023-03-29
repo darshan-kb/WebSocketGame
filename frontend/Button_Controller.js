@@ -165,7 +165,7 @@ ws.onmessage = message => {                             //wiring of the event wi
   }
 
   if(response.method == "newticket"){
-    //printTicket(response);
+    printTicket(response);
     console.log("received ticket! ")
   }
 
@@ -393,10 +393,14 @@ const items = [
 //print command
   function printTicket(ticket) {
     //console.log(ticket.ticketID);
-    let str = "ticketID"+" "+ticket.ticketID+"\n";
-    for(var i=0;i<ticket.ticketdata.length;i++){
-      if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0){
-        str+= i+" : "+ticket.ticketdata[i]+"\n";
+    let str1 = ""+ticket.ticketID;
+    let str2="";
+    for(var i=0;i<ticket.ticketdata.length;i+=2){
+      if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0&&i==ticket.ticketdata.length-1){
+        str2+= (i+1)+" : "+ticket.ticketdata[i]+"\n";
+      }
+      else if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0){
+        str2+= (i+1)+" : "+ticket.ticketdata[i]+"  "+(i+2)+" : "+ticket.ticketdata[i+1]+"\n";
       }
     }
 
@@ -408,7 +412,7 @@ const items = [
           'Accept': 'application/json',
           'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ "text": str })
+          body: JSON.stringify({ "ticketId": str1, "data": str2})
           }).then(response => {console.log(response)}).then(data =>{console.log(data)});
   }
   catch(err){
@@ -426,7 +430,7 @@ const items = [
   //  .then(response => response.json())
   //  .then(response => console.log(JSON.stringify(response)))
 
-    console.log(str);
+    //console.log(str);
    // var printWindow = window.open();
     // printWindow.document.open('text/plain')
     // printWindow.document.write(str);

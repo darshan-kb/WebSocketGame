@@ -8,5 +8,18 @@
 <body>
   <nav>
     <h1><a href="/">Slot Machine</a></h1>
+    <ul>
+      <% if(useremail){ %>
+      <li>Welcome, <%= useremail%> </li>
+      <li><a href="/slotmachine">Game</a></li>
+      <li><a href="/report">Report</a></li>
+          <% if(usertype=='admin'){%>
+            <li><a href="/signup">sign up </a></li>
+          <%}%>
+      <li><a href="/logout">logout</a></li>
+      <%} else{ %>
+      <li><a href="/login">Login</a></li>
+      <%}%>
+    </ul>
   </nav>
   

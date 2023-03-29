@@ -11,7 +11,8 @@ const dotenv = require("dotenv");
 const db = require("./config/db.js");
 const appRoutes = require('./routes/appRoutes');
 const cookieParser = require('cookie-parser');
-const {requireAuth} = require('./middleware/authMiddleware');
+const {requireAuth, checkUser} = require('./middleware/authMiddleware');
+
 
 
 dotenv.config();
@@ -39,8 +40,10 @@ db.connect().then(()=>{
     console.error(err);
 })
 
+//routes
+app.get('*', checkUser);
 app.use(appRoutes);
-app.get("/", requireAuth, (req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
+app.get("/slotmachine", requireAuth, (req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
 
 
 //app.use(express.static("frontend"));
