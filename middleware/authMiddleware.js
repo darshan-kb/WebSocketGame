@@ -1,14 +1,15 @@
 const jwt = require('jsonwebtoken');
-const User = require('../model/User')
+const User = require('../model/User');
 
 const requireAuth = (req, res, next) =>{
     const token = req.cookies.jwt;
 
-
+    console.log(req.cookies);
     //check json web token exists and verify
 
     if(token){
         jwt.verify(token,'pinto slot machine', (err, decodedToken)=>{
+            //console.log("cookies from here");
             if(err){
                 console.log(err.message);
                 res.redirect('/login');
@@ -73,4 +74,22 @@ const adminCheck = (req, res, next) =>{
     }
 }
 
-module.exports = {requireAuth, checkUser, adminCheck};
+const loggedIn = (req, res, next) =>{
+    const token = req.cookies.jwt;
+    if(token){
+        jwt.verify(token,'pinto slot machine', async (err, decodedToken)=>{
+            if(err){
+                console.log(err.message);
+                next();
+            }
+            else{
+                res.redirect('/');
+            }
+        });
+    }
+    else{
+        next();
+    }
+}
+
+module.exports = {requireAuth, checkUser, adminCheck, loggedIn};

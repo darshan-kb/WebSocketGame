@@ -12,6 +12,7 @@ const db = require("./config/db.js");
 const appRoutes = require('./routes/appRoutes');
 const cookieParser = require('cookie-parser');
 const {requireAuth, checkUser} = require('./middleware/authMiddleware');
+const getemail = require('./services/getjwtdetails');
 
 
 
@@ -43,7 +44,7 @@ db.connect().then(()=>{
 //routes
 app.get('*', checkUser);
 app.use(appRoutes);
-app.get("/slotmachine", requireAuth, (req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
+//app.get("/slotmachine", requireAuth, (req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
 
 
 //app.use(express.static("frontend"));
@@ -70,12 +71,13 @@ let slot1 = -1;
 let slot2 = -1;
 let gameID = null;
 
+
 websocket.on("request", request=>{
     let connection = request.accept(null, request.origin);
-    let clientID = uuid.generateUUID();
-    connections.push(apl.con_array_payload(clientID, connection));
+    
     console.log(connection);
-    connection.on("open", ()=> console.log("Opened"));
+    connection.on("open", ()=> {
+    });
     connection.on("close", ()=> {
         console.log("closed");
         let i=0;
@@ -88,6 +90,8 @@ websocket.on("request", request=>{
         }
     });
 
+    //connections.push(apl.con_array_payload(clientID, connection));
+
     
 
 
@@ -95,11 +99,17 @@ websocket.on("request", request=>{
     connection.on("message", message=>{                             // this method is called when we call ws.send from the client
         let request = JSON.parse(message.utf8Data);
         console.log(request);
+
+        if(request.method=="open"){
+            connections.push(apl.con_array_payload(request.clientID, connection));
+            connection.send(JSON.stringify(apl.init_payload(request.clientID)));
+            //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
+        }
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
             //let pdata = tpdata.preprocessdata(data);
             let ticketID = Date.now();
-            db.addticket(apl.all_db_ticket_payload(clientID,ticketID,data),gameID);
+            db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
             tpdata.addData(data,allDataN);
             console.log(allDataN);
             ticketpayload = apl.ticket_response_payload(ticketID,data);
@@ -119,7 +129,7 @@ websocket.on("request", request=>{
     
     payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);                                    //when client connect for the first time then send the queue from the server
 
-    connection.send(JSON.stringify(apl.init_payload(clientID)));
+    //connection.send(JSON.stringify(apl.init_payload(clientID)));
 
     if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
         payloadsend.payLoadSendToAll(apl.spin_count_payload(),connections);
@@ -140,7 +150,7 @@ function countDown(){
     //spin=-1;
     count=60;
     var x = setInterval(function(){
-
+        console.log(connections);
         //gameID will be generated once the game is started
         if(count==60){
             clearData();

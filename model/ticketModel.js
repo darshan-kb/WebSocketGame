@@ -15,6 +15,14 @@ const ticketSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    amount:{
+        type: Number,
+        default:0
+    },
+    reward:{
+        type:Number,
+        default:0
+    },
     ticket:{
         type:[{
             clientID: {type: String},

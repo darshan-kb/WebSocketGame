@@ -34,7 +34,8 @@
 
             const email = form.email.value;
             const password = form.password.value;
-
+            //res.locals.myData = JSON.stringify(useremail);
+            //console.log(<%- myData%>);
             try{
                 const res = await fetch('/signup',{
                     method: 'POST',
