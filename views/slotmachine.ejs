@@ -45,7 +45,13 @@
         </div>
         <div class="Buttons">
             <div class="buttonheader">
-
+              <nav>
+                <ul>
+                  <li><a href="/">Home</a></li>
+                  <li>Welcome, <%= useremail %></li>
+                  <li id="balance"></li>
+                </ul>
+              </nav>
             </div>
             <div class="slotQ">
                 <div class="Qslots" style="margin-left: 10%;">
@@ -572,6 +578,7 @@ ws.onmessage = message => {                             //wiring of the event wi
 
   if(response.method == "newticket"){
     console.log(response.balance);
+    updatebalance(response.balance);
     //printTicket(response);
     console.log("received ticket! ")
   }
@@ -597,7 +604,8 @@ ws.onmessage = message => {                             //wiring of the event wi
     //setInterval(1000*60,init());
   }
   if(response.method == "init"){
-    console.log(response.balance);
+    //console.log(response.balance);
+    updatebalance(response.balance);
     //console.log("In init");
     
     //clientID = response.clientID;
@@ -620,6 +628,11 @@ ws.onmessage = message => {                             //wiring of the event wi
 //   }
 //   ws.send(JSON.stringify(payload));
 // }
+
+function updatebalance(bal){
+  let balli = document.getElementById("balance");
+  balli.innerHTML = "Balance : "+bal;
+}
 function drawclose(){
   let draw = document.getElementById("drawclosed");
   draw.innerHTML = "DRAW CLOSED!";

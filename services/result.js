@@ -1,5 +1,6 @@
 const apl = require("./allpayload.js");
 const payloadsend = require("./payloadsend.js");
+const db = require("../config/db");
 
 function shuffle(a) {
     var j, x, i;
@@ -58,13 +59,19 @@ module.exports = class result {
         console.log(res2);
 
     
-
+        //updating the balance for each client
+        //db.updatebalance(slot1,slot2);
         // let respayload ={
         //     "method": "result",
         //     "res1": res1,
         //     "res2": res2,
         //     "spin": 30
         // }
+
+
+
+
+
         payloadsend.payLoadSendToAll(apl.result_payload(res1,res2),con);
         return {"res1":res1, "res2": res2, "slot1": slot1, "slot2": slot2};
         //clearData();

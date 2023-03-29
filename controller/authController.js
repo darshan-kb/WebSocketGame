@@ -55,6 +55,8 @@ const items = [
     '🍠',
   ];
 
+  const recharge = ["100","500","1000","2000","5000","10000","20000","50000"]
+
 const prize=[0,8,16,24];
 
 
@@ -117,4 +119,26 @@ module.exports.report = (req, res) => {
 
 module.exports.slotmachine = (req, res) => {
     res.render('slotmachine');
+}
+
+module.exports.admin_get = (req, res) => {
+    db.findalluser().then(
+    (data) => {
+        console.log(data);
+        res.render('admin',{users: data, recharge: recharge});
+    });
+}
+
+module.exports.admin_post = (req, res) => {
+    console.log(req.body);
+
+    db.rechargebalance(req.body).then((obj)=>{
+        if(obj){
+            res.status(200).json({status:"successfull"});
+        }
+        else{
+            res.status(400).json({status:"failed"});
+        }
+    })
+    
 }

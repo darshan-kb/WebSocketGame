@@ -74,6 +74,33 @@ async function balancecheck(tdata,clientID){
     }
 }
 
+async function findalluser(){
+    try{
+        const data = await user.find({}).select('email');
+        let users=[];
+        for(let i of data){
+            users.push(i.email);
+        }
+        return users;
+    }
+    catch(err){
+
+    }
+}
+
+async function rechargebalance(request){
+    try{
+        
+        const data = await user.findOne({email:request.email});
+        const newbal = data.balance + request.amt;
+        await user.findOneAndUpdate({email:request.email},{$set:{balance:newbal}});
+        return true;
+    }
+    catch(err){
+        return false;
+    }
+}
+
 async function initbalancecheck(clientID){
     try{
         const data = await user.findOne({email:clientID});
@@ -110,3 +137,5 @@ module.exports.updateresult = updateresult;
 module.exports.finddata = finddata;
 module.exports.balancecheck = balancecheck;
 module.exports.initbalancecheck = initbalancecheck;
+module.exports.findalluser = findalluser;
+module.exports.rechargebalance = rechargebalance;

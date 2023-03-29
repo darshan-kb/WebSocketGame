@@ -102,12 +102,15 @@ websocket.on("request", request=>{
 
         if(request.method=="open"){
             connections.push(apl.con_array_payload(request.clientID, connection));
+            payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
             db.initbalancecheck(request.clientID).then(function(amt){
+                
                 connection.send(JSON.stringify(apl.init_payload(request.clientID,amt)));
+                
             });
             
             
-            //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
+            
         }
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
@@ -157,7 +160,7 @@ websocket.on("request", request=>{
     }) 
 
     
-    payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);                                    //when client connect for the first time then send the queue from the server
+    //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);                                    //when client connect for the first time then send the queue from the server
 
     //connection.send(JSON.stringify(apl.init_payload(clientID)));
 
