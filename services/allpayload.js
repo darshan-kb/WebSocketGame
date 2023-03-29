@@ -18,20 +18,22 @@ module.exports = class AllPayload{
     }
 
     //sending the ticket back to the client with ticketID
-    static ticket_response_payload(ticketID,pdata){
+    static ticket_response_payload(ticketID,pdata,amt){
         const ticketpayload = {
             "method": "newticket",
             "ticketID": ticketID,
-            "ticketdata": pdata
+            "ticketdata": pdata,
+            "balance": amt
         }
         return ticketpayload;
     }
 
     //This is send when client is connected for the first time.
-    static init_payload(clientID){
+    static init_payload(clientID,bal){
         const initpayload={
             "method": "init",
-            "clientID": clientID
+            "clientID": clientID,
+            "balance": bal
         }
         return initpayload;
     }

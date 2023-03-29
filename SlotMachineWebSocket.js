@@ -102,18 +102,48 @@ websocket.on("request", request=>{
 
         if(request.method=="open"){
             connections.push(apl.con_array_payload(request.clientID, connection));
-            connection.send(JSON.stringify(apl.init_payload(request.clientID)));
+            db.initbalancecheck(request.clientID).then(function(amt){
+                connection.send(JSON.stringify(apl.init_payload(request.clientID,amt)));
+            });
+            
+            
             //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
         }
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
+            console.log(data);
             //let pdata = tpdata.preprocessdata(data);
-            let ticketID = Date.now();
-            db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
-            tpdata.addData(data,allDataN);
-            console.log(allDataN);
-            ticketpayload = apl.ticket_response_payload(ticketID,data);
-            payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
+            db.balancecheck(data, request.clientID).then(function(amt){
+                if(amt!=-1){
+                    let ticketID = Date.now();
+                    db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
+                    tpdata.addData(data,allDataN);
+                    console.log(allDataN);
+                    ticketpayload = apl.ticket_response_payload(ticketID,data,amt);
+                    payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
+                }
+                else{
+                    let payload = {
+                        "method" : "InsufficientBalance"
+                    }
+                    payloadsend.findConnectionAndSend(request.clientID, payload,connections);
+                }
+            });
+            // if(db.balancecheck(data, request.clientID)){
+            //     let ticketID = Date.now();
+            //     db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
+            //     tpdata.addData(data,allDataN);
+            //     console.log(allDataN);
+            //     ticketpayload = apl.ticket_response_payload(ticketID,data);
+            //     payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
+            // }
+            // else{
+            //     let payload = {
+            //         "method" : "InsufficientBalance"
+            //     }
+            //     payloadsend.findConnectionAndSend(request.clientID, payload,connections);
+            // }
+            
         }    
 
         if(request.method === "AddData" && count<10){

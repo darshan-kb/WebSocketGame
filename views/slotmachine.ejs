@@ -566,8 +566,13 @@ ws.onmessage = message => {                             //wiring of the event wi
     //console.log("This is your clientId "+clientId);
   }
 
+  if(response.method == "InsufficientBalance"){
+    alert("Insufficient balance. Please recharge");
+  }
+
   if(response.method == "newticket"){
-    printTicket(response);
+    console.log(response.balance);
+    //printTicket(response);
     console.log("received ticket! ")
   }
 
@@ -592,6 +597,7 @@ ws.onmessage = message => {                             //wiring of the event wi
     //setInterval(1000*60,init());
   }
   if(response.method == "init"){
+    console.log(response.balance);
     //console.log("In init");
     
     //clientID = response.clientID;

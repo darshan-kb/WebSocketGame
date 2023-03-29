@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ticketModel = require("../model/ticketModel");
+const user = require("../model/User");
 
 const connectDB = async() => {
     try{
@@ -17,7 +18,7 @@ const connectDB = async() => {
 
 async function addticket(ticket,gameID){
     try{
-
+        console.log("ticket from here");
         console.log(ticket);
         let tempgame = await ticketModel.findOneAndUpdate({gameID:gameID}, {$push : {ticket:ticket}});
         // tempgame.ticket.push(ticket);
@@ -45,7 +46,38 @@ async function addgame(payload){
 
 async function updateresult(gameID, slot1, slot2){
     try{
-        let tempgame = await ticketModel.findOneAndUpdate({gameID:gameID}, {$set : {slot1:slot1, slot2:slot2}});
+        await ticketModel.findOneAndUpdate({gameID:gameID}, {$set : {slot1:slot1, slot2:slot2}});
+    }
+    catch(err){
+
+    }
+}
+
+async function balancecheck(tdata,clientID){
+    try{
+        
+        let sum=0;
+        for(let d of tdata){
+            sum+=d;
+        }
+        console.log("sum : "+sum);
+        const data = await user.findOne({email:clientID});
+        if(data.balance < sum){
+            return -1;
+        }
+        const newbal = data.balance - sum;
+        await user.findOneAndUpdate({email:clientID},{$set:{balance:newbal}});
+        return newbal;
+    }
+    catch(err){
+
+    }
+}
+
+async function initbalancecheck(clientID){
+    try{
+        const data = await user.findOne({email:clientID});
+        return data.balance;
     }
     catch(err){
 
@@ -76,3 +108,5 @@ module.exports.addgame = addgame;
 module.exports.addticket = addticket;
 module.exports.updateresult = updateresult;
 module.exports.finddata = finddata;
+module.exports.balancecheck = balancecheck;
+module.exports.initbalancecheck = initbalancecheck;
