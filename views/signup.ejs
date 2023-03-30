@@ -16,6 +16,9 @@
             <label for="password">Password</label>
             <input type="password" name="password" required/>
             <div class="password error"></div>
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="confirmpassword" name="confirmpassword" required/>
+            <div class="confirmpassword error"></div>
             <button>Sign up</button>
         </form>
     </body>
@@ -24,6 +27,7 @@
         const emailError = document.querySelector('.email.error');
         const emailsignup = document.querySelector('.email.signup');
         const passwordError = document.querySelector('.password.error');
+        const confirmpassword = document.querySelector('.confirmpassword.error');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -34,8 +38,14 @@
 
             const email = form.email.value;
             const password = form.password.value;
+            const confirmpassword = form.password.value;
             //res.locals.myData = JSON.stringify(useremail);
-            //console.log(<%- myData%>);
+
+            if(confirmpassword != password){
+                confirmpassword.textContent = "Confirmed password does not match";
+                return;
+            }
+            
             try{
                 const res = await fetch('/signup',{
                     method: 'POST',

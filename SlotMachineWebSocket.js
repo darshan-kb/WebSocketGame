@@ -103,14 +103,22 @@ websocket.on("request", request=>{
         if(request.method=="open"){
             connections.push(apl.con_array_payload(request.clientID, connection));
             payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
+            connection.send(JSON.stringify(apl.init_payload(request.clientID)));
             db.initbalancecheck(request.clientID).then(function(amt){
                 
-                connection.send(JSON.stringify(apl.init_payload(request.clientID,amt)));
+                connection.send(JSON.stringify(apl.balance_check_payload(amt)));
                 
             });
-            
-            
-            
+
+            if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
+                console.log("count "+count);
+                connection.send(JSON.stringify(apl.spin_count_payload()));
+            }
+        
+            if(count < 0 && count>=-25){          // If the client connected in between the spinning then decrease the spin time so that result get print before -30;
+                console.log("in spinning");
+                connection.send(JSON.stringify(apl.connect_between_game_payload(res1,res2,count)));
+            }
         }
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
@@ -164,14 +172,14 @@ websocket.on("request", request=>{
 
     //connection.send(JSON.stringify(apl.init_payload(clientID)));
 
-    if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
-        payloadsend.payLoadSendToAll(apl.spin_count_payload(),connections);
-    }
+    // if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
+    //     payloadsend.payLoadSendToAll(apl.spin_count_payload(),connections);
+    // }
 
-    if(count < 0 && count>=-25){          // If the client connected in between the spinning then decrease the spin time so that result get print before -30;
+    // if(count < 0 && count>=-25){          // If the client connected in between the spinning then decrease the spin time so that result get print before -30;
 
-        connection.send(JSON.stringify(apl.connect_between_game_payload(res1,res2,count)));
-    }
+    //     connection.send(JSON.stringify(apl.connect_between_game_payload(res1,res2,count)));
+    // }
 
 });
 
@@ -183,7 +191,7 @@ function countDown(){
     //spin=-1;
     count=60;
     var x = setInterval(function(){
-        console.log(connections);
+        //console.log(connections);
         //gameID will be generated once the game is started
         if(count==60){
             clearData();
@@ -207,7 +215,7 @@ function countDown(){
         count-=1;
 
         if(count == -1){              //when countdown is equal to 0 send the result to the client, equal to will avoid sending the result again and again
-            const res = result.resultSend(allDataN,connections);
+            const res = result.resultSend(allDataN,connections,gameID);
             res1 = res.res1;
             res2 = res.res2;
             slot1 = res.slot1;
@@ -218,6 +226,14 @@ function countDown(){
         if(count===QUEUESENDTIME){              //when the spinning is over send the queue to show the updated history of results
             queueops.sendQueue(queue,slot1,slot2,connections,GAME_TIMESTAMP);
             db.updateresult(gameID,slot1,slot2);
+            db.updatebalance(slot1,slot2,gameID).then(function(users){
+                for(let user of Object.keys(users)){
+                    db.initbalancecheck(user).then(function(amt){
+                        payloadsend.findConnectionAndSend(user, apl.balance_check_payload(amt),connections);
+                    });
+                }
+            });
+            //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
         }
 
         if(count<-60){          //when everthing is done reset the clock
@@ -248,7 +264,7 @@ const items = [
     '🍿',
     '🧨',
     '☀️',
-    '🍠',
+    '🛺',
   ];
 
 const prize=[0,10,20,30];

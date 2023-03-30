@@ -97,4 +97,11 @@ module.exports = class AllPayload{
         }
         return sendqpayload;
     }
+    static balance_check_payload(amt){
+        let sendbpayload = {
+            "method": "balance",
+            "balance": amt
+        }
+        return sendbpayload;
+    }
 }

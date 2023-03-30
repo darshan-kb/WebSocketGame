@@ -6,6 +6,7 @@ li{
     padding: 0;
     font-family: 'Quicksand', sans-serif;
     color: #444;
+    
   }
 
   ul{
@@ -27,6 +28,7 @@ li{
   }
   nav li{
     margin-left: 20px;
+
   }
   nav li a{
     text-transform: uppercase;
@@ -65,9 +67,10 @@ li{
     background-color: #fafafa; 
     border: 10px solid #05004e;
     border-radius: 30px;
-    font-size: 50px;
+    font-size: 60px;
+    font-weight: 600;
     text-align: center;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Quicksand', sans-serif;
 }
 .drawclose{
     margin-left: 3%;
@@ -80,6 +83,7 @@ li{
     color: white;
     text-align: center;
     font-family: 'Quicksand', sans-serif;
+    font-weight: 900;
     /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
 }
 .Reels_Heading{
@@ -88,6 +92,8 @@ li{
     justify-content: center;
     width :93%;
     height:20%;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
     /*background-color: darkseagreen;*/
     background-color: #f7f7f2;
     /* border: 10px solid #069462; */
@@ -128,7 +134,7 @@ li{
     height:15%;
     width: 35%;
     font-size:16px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Quicksand', sans-serif;
     font-weight: 900;
 }
 
@@ -138,7 +144,8 @@ li{
     width: 40%;
     float: right;
     font-size:25px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
     /* margin-right: 10px;
     margin-top: 10px; */
     
@@ -150,7 +157,8 @@ li{
     float:left;
     margin-left: 10px;
     font-size:25px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
 }
 .Qslot{
     height:60%;
@@ -328,7 +336,8 @@ li{
 
 .digit_text{
     font-size: 28px;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 900;
 }
 
 .doors {
@@ -348,7 +357,8 @@ border-radius: 5px;
 margin: 0;
 margin-left: 16px;
 margin-top: 30px;
-font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+font-family: 'Quicksand', sans-serif;
+font-weight: 600;
 }
 
 .boxes {
@@ -390,7 +400,7 @@ font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans
     float:left;
     display: block;
     text-align: center;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .AllOButton{

@@ -17,7 +17,7 @@ function shuffle(a) {
 module.exports = class result { 
 
 
-    static resultSend(allDataN,con,res1,res2,slot1,slot2){              //sending the result of the current game
+    static resultSend(allDataN,con,gameID){              //sending the result of the current game
         let tmp = [];
         let c=0;
         let sum = 0;
@@ -33,11 +33,11 @@ module.exports = class result {
 
         console.log(tmp);
         let winner = tmp[Math.floor(Math.random() * tmp.length)];
-        slot1 = winner%12;
-        slot2 = parseInt(winner/12);
+        let slot1 = winner%12;
+        let slot2 = parseInt(winner/12);
         console.log("sum = "+sum+" prize : "+allDataN[winner]);
-        res1 = [];
-        res2 = [];
+        let res1 = [];
+        let res2 = [];
         c=0;
         for(let i=0;i<12;i++){
                 if(i!=slot1){
@@ -58,19 +58,7 @@ module.exports = class result {
         console.log(res1);
         console.log(res2);
 
-    
-        //updating the balance for each client
-        //db.updatebalance(slot1,slot2);
-        // let respayload ={
-        //     "method": "result",
-        //     "res1": res1,
-        //     "res2": res2,
-        //     "spin": 30
-        // }
-
-
-
-
+        db.update_total_sum_reward(sum,allDataN[winner],gameID);
 
         payloadsend.payLoadSendToAll(apl.result_payload(res1,res2),con);
         return {"res1":res1, "res2": res2, "slot1": slot1, "slot2": slot2};

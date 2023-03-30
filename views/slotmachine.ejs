@@ -8,7 +8,7 @@
         <div class="Reels">
             <div class="Reels_Heading">
                 <div class="shadow">
-                    <p style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;"> SLOT MACHINE GAME</p>
+                    <p> SLOT MACHINE GAME</p>
                 </div>
                 
             </div>
@@ -370,7 +370,7 @@
                 <div class="buttonbox">
                     <div class="a3">
                         <button class="Option_button" id="p12">
-                            <div class="buttonlabel">🍠
+                            <div class="buttonlabel">🛺
                                 <div class="digit_text" >
                                 12
                                 </div>
@@ -579,7 +579,7 @@ ws.onmessage = message => {                             //wiring of the event wi
   if(response.method == "newticket"){
     console.log(response.balance);
     updatebalance(response.balance);
-    //printTicket(response);
+    printTicket(response);
     console.log("received ticket! ")
   }
 
@@ -604,12 +604,10 @@ ws.onmessage = message => {                             //wiring of the event wi
     //setInterval(1000*60,init());
   }
   if(response.method == "init"){
-    //console.log(response.balance);
-    updatebalance(response.balance);
-    //console.log("In init");
-    
-    //clientID = response.clientID;
     init();
+  }
+  if(response.method == "balance"){
+    updatebalance(response.balance);
   }
   if(response.method == "displayQueue"){
     queue = response.Queue;
@@ -705,7 +703,7 @@ const items = [
     '🍿',
     '🧨',
     '☀️',
-    '🍠',
+    '🛺',
   ];
   const prizearr = ['N','X2','X3'];
   const doors = document.querySelectorAll('.door');

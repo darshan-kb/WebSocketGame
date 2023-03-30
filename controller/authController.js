@@ -52,12 +52,12 @@ const items = [
     '🍿',
     '🧨',
     '☀️',
-    '🍠',
+    '🛺',
   ];
 
   const recharge = ["100","500","1000","2000","5000","10000","20000","50000"]
 
-const prize=[0,8,16,24];
+const prize=[0,10,20,30];
 
 
 module.exports.signup_get = (req, res) => {

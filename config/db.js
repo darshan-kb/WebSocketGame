@@ -91,9 +91,9 @@ async function findalluser(){
 async function rechargebalance(request){
     try{
         
-        const data = await user.findOne({email:request.email});
-        const newbal = data.balance + request.amt;
-        await user.findOneAndUpdate({email:request.email},{$set:{balance:newbal}});
+        //const data = await user.findOne({email:request.email});
+        //const newbal = data.balance + parseInt(request.amt);
+        await user.findOneAndUpdate({email:request.email},{$inc:{balance:parseInt(request.amt)}});
         return true;
     }
     catch(err){
@@ -101,6 +101,14 @@ async function rechargebalance(request){
     }
 }
 
+async function update_total_sum_reward(sum,reward,gameID){
+    try{
+        await ticketModel.findOneAndUpdate({gameID:gameID},{$set:{amount:sum, reward:reward}});
+    }
+    catch(err){
+        
+    }
+}
 async function initbalancecheck(clientID){
     try{
         const data = await user.findOne({email:clientID});
@@ -108,6 +116,33 @@ async function initbalancecheck(clientID){
     }
     catch(err){
 
+    }
+}
+
+async function updatebalance(slot1,slot2,gameID){
+    try{
+        const data = await ticketModel.findOne({gameID:gameID});
+        //console.log(data);
+        let users=[];
+        const prize=[0,10,20,30];
+        for(let tic of data.ticket){
+            if(users[tic.clientID]==null){
+                users[tic.clientID] = tic.ticketdata[slot1]*prize[slot2+1];
+            }
+            else{
+                users[tic.clientID] += tic.ticketdata[slot1]*prize[slot2+1];
+            }
+        }
+        //console.log(users);
+        for(let ind of Object.keys(users)){
+            let val = users[ind];
+            await user.findOneAndUpdate({email:ind},{$inc:{balance:val}});
+        }
+
+        return users;
+    }
+    catch(err){
+        console.log(err)
     }
 }
 
@@ -139,3 +174,5 @@ module.exports.balancecheck = balancecheck;
 module.exports.initbalancecheck = initbalancecheck;
 module.exports.findalluser = findalluser;
 module.exports.rechargebalance = rechargebalance;
+module.exports.update_total_sum_reward = update_total_sum_reward;
+module.exports.updatebalance = updatebalance;
