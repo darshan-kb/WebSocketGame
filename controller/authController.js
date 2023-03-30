@@ -81,10 +81,10 @@ module.exports.signup_post = async (req, res) => {
     const { email, password } = req.body;
 
     try{
-        const user = await User.create({ email, password});
+        const user = await User.create({ email, password,balance:0,userType:"client"});
         //const token = createToken(user._id);
         //res.cookie('jwt', token, {httpOnly: true, maxAge:maxAge*1000});
-        res.status(400).json({signup: "Sign up successful"});
+        res.status(200).json({signup: "Sign up successful"});
         //res.status(201).json({user: user._id});
     }
     catch(err){

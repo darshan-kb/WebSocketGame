@@ -17,7 +17,7 @@
             <input type="password" name="password" required/>
             <div class="password error"></div>
             <label for="confirmpassword">Confirm Password</label>
-            <input type="confirmpassword" name="confirmpassword" required/>
+            <input type="password" name="confirmpassword" required/>
             <div class="confirmpassword error"></div>
             <button>Sign up</button>
         </form>
@@ -35,13 +35,15 @@
             //Reset error
             emailError.textContent = '';
             passwordError.textContent = '';
+            emailsignup.textContent = '';
+            confirmpassword.textContent = '';
 
             const email = form.email.value;
             const password = form.password.value;
-            const confirmpassword = form.password.value;
+            const cp = form.confirmpassword.value;
             //res.locals.myData = JSON.stringify(useremail);
 
-            if(confirmpassword != password){
+            if(cp != password){
                 confirmpassword.textContent = "Confirmed password does not match";
                 return;
             }
