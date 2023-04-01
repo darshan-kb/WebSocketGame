@@ -1,13 +1,13 @@
 //import express from "express";
+const path = require('path');
+require("dotenv").config({path : "./.env"});
 const tpdata = require("./services/tempdata.js");
 const uuid = require("./services/uuid.js");
 const apl = require("./services/allpayload.js");
 const http = require("http"); // creating http server
-const path = require('path');
 const result = require("./services/result.js");
 const payloadsend = require("./services/payloadsend.js");
 const queueops = require("./services/queueop.js");
-const dotenv = require("dotenv");
 const db = require("./config/db.js");
 const appRoutes = require('./routes/appRoutes');
 const cookieParser = require('cookie-parser');
@@ -16,9 +16,9 @@ const getemail = require('./services/getjwtdetails');
 
 
 
-dotenv.config();
+// dotenv.config();
 
-let count = 60;
+let count = process.env.COUNTDOWN_TIME;
 const QUEUESENDTIME = -40;
 let GAME_TIMESTAMP = new Date();
 
@@ -189,11 +189,11 @@ countDown();
 function countDown(){
     addflag=true;
     //spin=-1;
-    count=60;
+    //count=60;
     var x = setInterval(function(){
         //console.log(connections);
         //gameID will be generated once the game is started
-        if(count==60){
+        if(count==process.env.COUNTDOWN_TIME){
             clearData();
             gameID = uuid.generateUUID();
             GAME_TIMESTAMP = new Date();
@@ -236,8 +236,8 @@ function countDown(){
             //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
         }
 
-        if(count<-60){          //when everthing is done reset the clock
-            count = 60;
+        if(count<process.env.REST_TIME){          //when everthing is done reset the clock
+            count = process.env.COUNTDOWN_TIME;
         }
     },1000);
 }

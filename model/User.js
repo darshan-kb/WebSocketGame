@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
     email:{
@@ -20,11 +21,16 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default:0,
         min: [0, 'Insufficient balance']
-    }
+    },
+    resetPasswordToken:String,
+    resetPasswordExpire: Date
 });
 
 //fire a function before doc saved to db
 userSchema.pre('save', async function(next){
+    if(!this.isModified("password")){
+        next();
+    }
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password,salt);
     next();
@@ -41,6 +47,13 @@ userSchema.statics.login = async function(email, password){
         throw Error('incorrect password');
     }
     throw Error('incorrect email');
+}
+
+userSchema.methods.getResetPasswordToken = function(){
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.resetPasswordExpire = Date.now() + 10*(60*1000);
+    return resetToken; 
 }
 
 const User = mongoose.model('user', userSchema);

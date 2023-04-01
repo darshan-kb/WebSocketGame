@@ -8,7 +8,7 @@ const requireAuth = (req, res, next) =>{
     //check json web token exists and verify
 
     if(token){
-        jwt.verify(token,'pinto slot machine', (err, decodedToken)=>{
+        jwt.verify(token,process.env.JWT_SECRET, (err, decodedToken)=>{
             //console.log("cookies from here");
             if(err){
                 console.log(err.message);
@@ -28,7 +28,7 @@ const requireAuth = (req, res, next) =>{
 const checkUser = (req, res, next) =>{
     const token = req.cookies.jwt;
     if(token){
-        jwt.verify(token,'pinto slot machine', async (err, decodedToken)=>{
+        jwt.verify(token,process.env.JWT_SECRET, async (err, decodedToken)=>{
             if(err){
                 //console.log(err.message);
                 res.locals.useremail =null;
@@ -59,7 +59,7 @@ const checkUser = (req, res, next) =>{
 const adminCheck = (req, res, next) =>{
     const token = req.cookies.jwt;
     if(token){
-        jwt.verify(token,'pinto slot machine', async (err, decodedToken)=>{
+        jwt.verify(token,process.env.JWT_SECRET, async (err, decodedToken)=>{
             if(err){
                 console.log(err.message);
                 res.redirect('/');
@@ -81,7 +81,7 @@ const adminCheck = (req, res, next) =>{
 const loggedIn = (req, res, next) =>{
     const token = req.cookies.jwt;
     if(token){
-        jwt.verify(token,'pinto slot machine', async (err, decodedToken)=>{
+        jwt.verify(token,process.env.JWT_SECRET, async (err, decodedToken)=>{
             if(err){
                 console.log(err.message);
                 next();

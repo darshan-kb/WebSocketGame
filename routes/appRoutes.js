@@ -15,5 +15,9 @@ router.post('/login', loggedIn, authController.login_post);
 router.get('/slotmachine', requireAuth, authController.slotmachine);
 router.get('/report', requireAuth, authController.report);
 router.get('/logout', authController.logout_get);
+router.get('/forgotpassword',loggedIn, authController.forgotpassword_get);
+router.post('/forgotpassword',loggedIn, authController.forgotpassword_post);
+router.put('/resetpassword/:resetToken',loggedIn, authController.resetpassword_put);
+router.get('/resetpassword/:resetToken',loggedIn, authController.resetpassword_get);
 
 module.exports = router;

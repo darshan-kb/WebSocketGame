@@ -1,6 +1,8 @@
 const db = require("../config/db.js");
 const User = require("../model/User.js");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../services/sendEmail.js");
+const crypto = require('crypto');
 
 
 const handleErrors = (err) => {
@@ -31,12 +33,13 @@ const handleErrors = (err) => {
     return errors;
 }
 
-const maxAge = 24*60*60;
+//const maxAge = 24*60*60;
 const createToken = (id) => {
-    return jwt.sign({id}, 'pinto slot machine',{
-        expiresIn: maxAge
+    return jwt.sign({id}, process.env.JWT_SECRET,{
+        expiresIn: process.env.JWT_EXPIRE
     });
 }
+
 
 
 
@@ -82,16 +85,12 @@ module.exports.signup_post = async (req, res) => {
 
     try{
         const user = await User.create({ email, password,balance:0,userType:"client"});
-        //const token = createToken(user._id);
-        //res.cookie('jwt', token, {httpOnly: true, maxAge:maxAge*1000});
         res.status(200).json({signup: "Sign up successful"});
-        //res.status(201).json({user: user._id});
     }
     catch(err){
         const errors = handleErrors(err);
         res.status(400).json({errors});
     }
-    //res.send('signup');
 }
 
 module.exports.login_post = async (req, res) => {
@@ -99,7 +98,7 @@ module.exports.login_post = async (req, res) => {
     try{
         const user = await User.login(email, password);
         const token = createToken(user._id);
-        res.cookie('jwt', token, {httpOnly: true, maxAge:maxAge*1000});
+        res.cookie('jwt', token, {httpOnly: true, maxAge:24*60*60*1000});
         res.status(200).json({user: user._id});
     }
     catch(err){
@@ -139,6 +138,79 @@ module.exports.admin_post = (req, res) => {
         else{
             res.status(400).json({status:"failed"});
         }
-    })
+    }) 
+}
+
+module.exports.forgotpassword_get = (req, res) => {
+    res.render('forgotpassword');
+}
+
+module.exports.forgotpassword_post = async (req,res,next)=>{
+    const {email} = req.body;
+    try{
+        const user = await User.findOne({email});
+
+        if(!user){
+            return next();
+        }
+
+        const resetToken = user.getResetPasswordToken();
+        await user.save();
+
+        const resetUrl = `http://localhost:9998/resetpassword/${resetToken}`;
+        
+        const message=`
+        <h1> You have requested a password reset</h1>
+        <p>Please go to this link to reset your password</p>
+        <a href=${resetUrl} clicktracking=off>${resetUrl}</a>`
+
+        try{
+            await sendEmail({
+                to: user.email,
+                subject: "Password Reset Request",
+                text:message
+            });
+            res.status(200).json({success:true, data:"Email sent"});
+        }
+        catch(err){
+            user.resetPasswordToken=undefined;
+            user.resetPasswordExpire=undefined;
+            await user.save();
+            console.log(handleErrors(err));
+        }
+    }
+    catch(err){
+        console.log(handleErrors(err));
+    }
+}
+
+module.exports.resetpassword_get = (req, res) => {
+    res.render('resetpassword');
+}
+
+module.exports.resetpassword_put = async (req, res)=>{
+    console.log(req.params.resetToken);
+    const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
     
+    try{
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire:{$gt: Date.now()}
+        });
+        console.log("I am here");
+        if(!user){
+            console.log("Invalid reset token");
+            return
+        }
+        
+        user.password = req.body.password;
+        user.resetPasswordToken=undefined;
+        user.resetPasswordExpire=undefined;
+        await user.save();
+        res.status(200).json({success:true, data: "password reset successfully"});
+        //res.redirect('/');
+    }
+    catch(err){
+        console.log(handleErrors(err));
+    }
 }

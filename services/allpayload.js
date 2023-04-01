@@ -53,7 +53,7 @@ module.exports = class AllPayload{
             "method": "result",
             "res1": res1,
             "res2": res2,
-            "spin": (30+count)
+            "spin": (process.env.SPIN_TIME+count)
         }
         return payload;
     }
@@ -64,7 +64,7 @@ module.exports = class AllPayload{
             "method": "result",
             "res1": res1,
             "res2": res2,
-            "spin": 30
+            "spin": process.env.SPIN_TIME
         }
         return respayload;
     }
