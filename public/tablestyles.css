@@ -24,6 +24,7 @@ table, th, td {
     font-family: 'Quicksand', sans-serif;
     background-color: white;
     font-weight: 400;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
 }
 
 .footerdiv{

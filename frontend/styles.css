@@ -39,6 +39,7 @@
     /* background-color: antiquewhite; */
     /* background-color: #a203e1; */
     background: linear-gradient(110.1deg, rgb(241, 115, 30) 18.9%, rgb(231, 29, 54) 90.7%);
+    /* background-image: linear-gradient(to right, #ff671f, #ff7e89, #ffacd5, #fcdafc, #ffffff); */
     /* padding: 15px;      Padding is used to create space around an element's content, inside of any defined borders. */
 }
 .Buttons{
@@ -48,6 +49,7 @@
    /* background-color: burlywood;*/
    /* background-color: #BC10FF; */
    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+   /* background-image: linear-gradient(to right, #ffffff, #c5d5e8, #74b3c5, #199188, #046a38); */
     align-content: center;
     
 }
@@ -338,6 +340,8 @@ margin-left: 1.3vw;
 margin-top: 3.5vw;
 font-family: 'Quicksand', sans-serif;
 font-weight: 600;
+
+box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
 }
 
 .boxes {
@@ -345,6 +349,7 @@ font-weight: 600;
     height: 35%; */
     
     transition: transform 1s ease-in-out;
+    
   }
   
 .box {

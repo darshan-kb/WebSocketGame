@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="styles.css">
         <title>slot machine</title>
     </head>
-    <body>
+    <body style="margin: 0;">
         <div class="container">
         <div class="Reels">
             <div class="Reels_Heading">
@@ -661,6 +661,14 @@ function renderQueue(queue){
     }
 }
 
+function isZero(){
+  for(let i=0;i<12;i++){
+    if(points[i]!=0)
+      return false;
+  }
+  return true;
+}
+
 // adding ticket to the server
 const ba1 = document.getElementById("ba1");   
 ba1.addEventListener("click", e=>{
@@ -670,6 +678,12 @@ ba1.addEventListener("click", e=>{
     "clientID": client
   }
   console.log(points)
+
+  if(isZero()){
+    alert("Please select some options");
+    return;
+  }
+    
 
   for(let i=0;i<12;i++){
     let lb_div = document.getElementById(button_div[i]);

@@ -116,6 +116,14 @@ module.exports.report = (req, res) => {
     );
 }
 
+module.exports.profitreport = (req, res) => {
+    db.findprofitdata().then(
+        (result)=>{
+            res.render('profitreport', {result: result});
+        }
+    );
+}
+
 module.exports.slotmachine = (req, res) => {
     res.render('slotmachine');
 }

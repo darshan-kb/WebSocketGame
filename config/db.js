@@ -165,6 +165,21 @@ async function finddata(){
     }
 }
 
+async function findprofitdata(){
+    try{
+        //const start = new Date().toDateString();
+        let todaydata = await ticketModel.find().sort({timestamp:-1}).limit(20);
+        let last20tickets = [];
+        for(var i of todaydata){
+            last20tickets.push({GameID: i.gameID, Amount:i.amount, Reward:i.reward}); 
+        }
+        return last20tickets;
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
 module.exports.connect = connectDB;
 module.exports.addgame = addgame;
 module.exports.addticket = addticket;
@@ -176,3 +191,4 @@ module.exports.findalluser = findalluser;
 module.exports.rechargebalance = rechargebalance;
 module.exports.update_total_sum_reward = update_total_sum_reward;
 module.exports.updatebalance = updatebalance;
+module.exports.findprofitdata = findprofitdata;
