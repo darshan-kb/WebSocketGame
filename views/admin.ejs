@@ -1,0 +1,68 @@
+
+
+<html>
+    <head>
+        <link href="/style.css" rel="stylesheet" type="text/css">
+        <title>Admin</title>
+    </head>
+    <body>
+        <%- include('partials/header'); -%>
+        <form>
+            <h2>Recharge</h2>
+            <div class="recharge_status"></div>
+            <label>Users
+                    <select id="users">
+                        <option></option>
+                        <%for(let i=0;i<users.length;i++){%>
+                            <!-- <label><%=users[i]%></label> -->
+                            <option value=<%=users[i]%>><%=users[i]%></option>
+                        <%}%>
+                    </select>
+                <label>Recharge amount
+                    <select id="recharge_amount">
+                        <option></option>
+                        <%for(let i=0;i<recharge.length;i++){%>
+                            <option value=<%=recharge[i]%>><%=recharge[i]%></option>
+                        <%}%>
+                    </select>
+            <button>Recharge</button>
+        </form>
+    </body>
+    <script>
+        const form = document.querySelector("form");
+        const status = document.querySelector('.recharge_status');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            var e = document.getElementById("users");
+            const email = e.value;
+
+            var f = document.getElementById("recharge_amount");
+            const amt = f.value;
+
+
+            try{
+                const res = await fetch('/admin',{
+                    method: 'POST',
+                    body: JSON.stringify({ email, amt}),
+                    headers: { 'content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                console.log(data);
+                status.textContent = "Recharge "+data.status;
+                // if(data.errors){
+                //     emailError.textContent = data.errors.email;
+                //     passwordError.textContent = data.errors.password;
+                // }
+                // if(data.user){
+                //     location.assign('/')
+                // }
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })
+    </script>
+</html>
+

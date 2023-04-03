@@ -1,13 +1,58 @@
+//import express from "express";
+const path = require('path');
+require("dotenv").config({path : "./.env"});
+const tpdata = require("./services/tempdata.js");
+const uuid = require("./services/uuid.js");
+const apl = require("./services/allpayload.js");
 const http = require("http"); // creating http server
-const app = require("express")();
-app.listen(9998, ()=>console.log("listening on http port 9998"));
-app.get("/",(req,res)=> res.sendFile(_dirname+"/index.html"));
+const result = require("./services/result.js");
+const payloadsend = require("./services/payloadsend.js");
+const queueops = require("./services/queueop.js");
+const db = require("./config/db.js");
+const appRoutes = require('./routes/appRoutes');
+const cookieParser = require('cookie-parser');
+const {requireAuth, checkUser} = require('./middleware/authMiddleware');
+const getemail = require('./services/getjwtdetails');
 
+
+
+// dotenv.config();
+
+let count = process.env.COUNTDOWN_TIME;
+const QUEUESENDTIME = -40;
+let GAME_TIMESTAMP = new Date();
+
+const { send } = require("process");
+const express = require("express");
+const app = express();
+app.set('view engine', 'ejs');
+app.set('views',path.join(__dirname,'./views'))
+
+app.use(express.static(path.join(__dirname,"./frontend")));
+app.use(express.static(path.join(__dirname,"./public")));
+app.use(express.json());
+
+app.use(cookieParser());
+
+db.connect().then(()=>{
+    console.log('Mongodb connected');
+    app.listen(9998, () => console.log("listening on 9998"));
+}).catch((err)=>{
+    console.error(err);
+})
+
+//routes
+app.get('*', checkUser);
+app.use(appRoutes);
+//app.get("/slotmachine", requireAuth, (req,res)=> res.sendFile(path.join(__dirname, "./frontend/SlotMachine_Front.html")));
+
+
+//app.use(express.static("frontend"));
 const webSocketServer = require("websocket").server; //creating websocket server this will give a class which contains all the events
 
 let connections = [];
-let count = 60;
-let spin = -1; //spinning time of the reel
+
+
 const httpserver = http.createServer((req, res) =>{
     console.log("we have received a request");
 })
@@ -18,227 +63,208 @@ const websocket = new webSocketServer({ //It takes the JSON.
     "httpServer" : httpserver           //we have to pass httpserver object to it. Its just the handshake part. httpserver has the socket for the TCP connection
 })
 let allDataN = [];
-//let allData1 = [];
-//let allData2 = [];
-for(let i=0;i<27;i++){
-    allDataN[i]=0;
-    //allData1[i]=0;
-    //allData2[i]=0;
-}
-let addflag=true;
-let spinning=false;
+
 let res1 = [];
 let res2 = [];
 let queue = [];
-let slot1 = 0;
-let slot2 = 0;
+let slot1 = -1;
+let slot2 = -1;
+let gameID = null;
+
 
 websocket.on("request", request=>{
-    //console.log("hello");
     let connection = request.accept(null, request.origin);
-    connections.push(connection);
-    connection.on("open", ()=> console.log("Opened"));
-    connection.on("close", ()=> console.log("closed"));
+    
+    console.log(connection);
+    connection.on("open", ()=> {
+    });
+    connection.on("close", ()=> {
+        console.log("closed");
+        let i=0;
+        //remove the connection id that is disconnected
+        for(let c of connections){
+            if(c.connection.state === "closed"){
+                connections.splice(i,1);
+            }
+            i++;
+        }
+    });
+
+    //connections.push(apl.con_array_payload(clientID, connection));
+
+    
+
+
+
     connection.on("message", message=>{                             // this method is called when we call ws.send from the client
-        //console.log(`message - ${message.utf8Data}`);
         let request = JSON.parse(message.utf8Data);
         console.log(request);
-        if(request.method === "AddData" && addflag===true){
+
+        if(request.method=="open"){
+            connections.push(apl.con_array_payload(request.clientID, connection));
+            payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
+            connection.send(JSON.stringify(apl.init_payload(request.clientID)));
+            db.initbalancecheck(request.clientID).then(function(amt){
+                
+                connection.send(JSON.stringify(apl.balance_check_payload(amt)));
+                
+            });
+
+            if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
+                console.log("count "+count);
+                connection.send(JSON.stringify(apl.spin_count_payload()));
+            }
+        
+            if(count < 0 && count>=-25){          // If the client connected in between the spinning then decrease the spin time so that result get print before -30;
+                console.log("in spinning");
+                connection.send(JSON.stringify(apl.connect_between_game_payload(res1,res2,count)));
+            }
+        }
+        if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
+            console.log(data);
+            //let pdata = tpdata.preprocessdata(data);
+            db.balancecheck(data, request.clientID).then(function(amt){
+                if(amt!=-1){
+                    let ticketID = Date.now();
+                    db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
+                    tpdata.addData(data,allDataN);
+                    console.log(allDataN);
+                    ticketpayload = apl.ticket_response_payload(ticketID,data,amt);
+                    payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
+                }
+                else{
+                    let payload = {
+                        "method" : "InsufficientBalance"
+                    }
+                    payloadsend.findConnectionAndSend(request.clientID, payload,connections);
+                }
+            });
+            // if(db.balancecheck(data, request.clientID)){
+            //     let ticketID = Date.now();
+            //     db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
+            //     tpdata.addData(data,allDataN);
+            //     console.log(allDataN);
+            //     ticketpayload = apl.ticket_response_payload(ticketID,data);
+            //     payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
+            // }
+            // else{
+            //     let payload = {
+            //         "method" : "InsufficientBalance"
+            //     }
+            //     payloadsend.findConnectionAndSend(request.clientID, payload,connections);
+            // }
             
-            console.log(data[3]);
-            for(let i=0;i<9;i++){
-                let tmp=parseInt(data[i])
-                allDataN[i] += tmp;
-                allDataN[i+9] += tmp*2;
-                allDataN[i+18] += tmp*3;
-            }
-            
-                console.log(allDataN);
-            
-        }
+        }    
 
-        
-        
-        
-
-        if(spin>=5 && spinning===true){
-            console.log("spinning....")
-            const payload={
-                "method": "result",
-                "res1": res1,
-                "res2": res2,
-                "spin": spin
-            }
-            connection.send(JSON.stringify(payload));
-        }
-
-        if(request.method === "AddData" && addflag===false){
-            const payload = {
+        if(request.method === "AddData" && count<10){
+            let payload = {
                 "method" : "AccessDenied"
             }
+            payloadsend.findConnectionAndSend(request.clientID, payload,connections);
+            
         }
 
     }) 
-    sendQueue();
 
-    const initpayload={
-        "method": "init"
-    }
-    connections.forEach(function(item){
-        item.send(JSON.stringify(initpayload));
-    });
+    
+    //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);                                    //when client connect for the first time then send the queue from the server
 
-    if(count<0){
-        const countPayload ={
-            "method": "countdown",
-            "count": "0:0"
-        }
-        connections.forEach(function(item){
-            item.send(JSON.stringify(countPayload));
-        });
-    }
+    //connection.send(JSON.stringify(apl.init_payload(clientID)));
 
-})
+    // if(count<0){                                   //If client connect in between the spinning then sent the 0:0 time to client
+    //     payloadsend.payLoadSendToAll(apl.spin_count_payload(),connections);
+    // }
+
+    // if(count < 0 && count>=-25){          // If the client connected in between the spinning then decrease the spin time so that result get print before -30;
+
+    //     connection.send(JSON.stringify(apl.connect_between_game_payload(res1,res2,count)));
+    // }
+
+});
+
+
+
 countDown();
 function countDown(){
     addflag=true;
     //spin=-1;
-    count=60;
+    //count=60;
     var x = setInterval(function(){
+        //console.log(connections);
+        //gameID will be generated once the game is started
+        if(count==process.env.COUNTDOWN_TIME){
+            clearData();
+            gameID = uuid.generateUUID();
+            GAME_TIMESTAMP = new Date();
+            db.addgame(apl.game_start_data(gameID,slot1,slot2,GAME_TIMESTAMP));
+            
+            //game.insertOne(apl.game_start_data(gameID,slot1,slot2));
+        }
         console.log(count);
         
         let min = parseInt(count/60);
         let sec = count%60;
-        const payload ={
-            "method": "countdown",
-            "count": min+":"+sec
-        }
-        connections.forEach(function(item){
-            item.send(JSON.stringify(payload));
-        });
-    
-        if(count<=10){
-            addflag=false;
-        }
-    
-    
-        count-=1;
-        if(count<0){
-            
-            
-            clearInterval(x);
-            resultSend();
-            spinning = true;
-            inSpinning();
-            setTimeout(countDown,1000*60);
-            
-        }
-    },1000);
-}
 
-function inSpinning(){
-    spin=30;
-    var x = setInterval(function(){
-        spin-=1;
-        console.log(spin);
+        if(count>=0){                               //send the time when it is greater than 0
+            payloadsend.payLoadSendToAll(apl.send_count_payload(min,sec),connections);
+        }
+
         
-        if(spin <= -3){
-            if(queue.length===5){
-                queue.shift();
-                queue.push({"firstTile": slot1,"secondTile": slot2});
-            }
-            else{
-                queue.push({"firstTile": slot1,"secondTile": slot2});
-            }
-            clearInterval(x);
-            sendQueue();
+        
+        count-=1;
+
+        if(count == -1){              //when countdown is equal to 0 send the result to the client, equal to will avoid sending the result again and again
+            const res = result.resultSend(allDataN,connections,gameID);
+            res1 = res.res1;
+            res2 = res.res2;
+            slot1 = res.slot1;
+            slot2 = res.slot2;
+            
+        }
+
+        if(count===QUEUESENDTIME){              //when the spinning is over send the queue to show the updated history of results
+            queueops.sendQueue(queue,slot1,slot2,connections,GAME_TIMESTAMP);
+            db.updateresult(gameID,slot1,slot2);
+            db.updatebalance(slot1,slot2,gameID).then(function(users){
+                for(let user of Object.keys(users)){
+                    db.initbalancecheck(user).then(function(amt){
+                        payloadsend.findConnectionAndSend(user, apl.balance_check_payload(amt),connections);
+                    });
+                }
+            });
+            //payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
+        }
+
+        if(count<process.env.REST_TIME){          //when everthing is done reset the clock
+            count = process.env.COUNTDOWN_TIME;
         }
     },1000);
-    
 }
 
-function sendQueue(){
-
-    
-
-    const payload = {
-        "method": "displayQueue",
-        "Queue": queue
-    }
-    connections.forEach(function(item){
-        item.send(JSON.stringify(payload));
-    });
-}
-
-function resultSend(){
-    let tmp = [];
-    let c=0;
-    let sum = 0;
-    for(let i=0;i<9;i++){
-        sum+=allDataN[i];
-    }
-
-    for(let i=0;i<27;i++){
-        if(sum>=allDataN[i]){
-            tmp[c++]=i;
-        }
-    }
-
-    console.log(tmp);
-    let winner = Math.floor(Math.random() * tmp.length);
-    slot1 = winner%9;
-    slot2 = parseInt(winner/9);
-
-    
-
-    res1 = [];
-    res2 = [];
-    c=0;
-    for(let i=0;i<9;i++){
-        if(i!=slot1){
-            res1[c++] = i;
-        }
-    }
-    c=0;
-    for(let i=0;i<3;i++){
-        if(slot2!=i){
-            res2[c++]=i;
-        }
-    }
-    shuffle(res1);
-    shuffle(res2);
-
-    res1.push(slot1);
-    res2.push(slot2);
-    console.log(res1);
-    console.log(res2);
-
-    const payload ={
-        "method": "result",
-        "res1": res1,
-        "res2": res2,
-        "spin": 30
-    }
-    connections.forEach(function(item){
-        item.send(JSON.stringify(payload));
-    });
-    clearData();
-}
 
 function clearData(){
-    for(let i=0;i<27;i++){
+    for(let i=0;i<36;i++){
         allDataN[i]=0;
     }
+    slot1=-1;
+    slot2=-1;
 }
 
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-}
+
+const items = [
+    '🍉',
+    '🍗',
+    '🍭',
+    '🍆',
+    '🍊',
+    '⚔️',
+    '🍹',
+    '🌽',
+    '🍿',
+    '🧨',
+    '☀️',
+    '🛺',
+  ];
+
+const prize=[0,10,20,30];

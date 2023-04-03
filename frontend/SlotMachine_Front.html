@@ -1,0 +1,401 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>slot machine</title>
+    </head>
+    <body>
+        <div class="container">
+        <div class="Reels">
+            <div class="Reels_Heading">
+                <div class="shadow">
+                    <p style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;"> SLOT MACHINE GAME</p>
+                </div>
+                
+            </div>
+            <div class="Countdown" id="count">
+
+            </div>
+            <div class="doors">
+                <div class="door">
+                  <div class="boxes">
+                    <!-- <div class="box">?</div> -->
+                  </div>
+                </div>
+            
+                <div class="door">
+                  <div class="boxes">
+                    <!-- <div class="box">?</div> -->
+                  </div>
+                </div>
+            
+                <div class="door">
+                  <div class="boxes">
+                    <!-- <div class="box">?</div> -->
+                  </div>
+                </div>
+            </div>
+
+            <div class="drawclose" id="drawclosed">
+
+            </div>
+            <!-- <div class="butto">
+                <button id="spinner" style="height:45px;width:100px;font-size: 18px;">Play</button>
+                <button id="reseter" style="height:45px;width:100px;font-size: 18px;">Reset</button>
+            </div> -->
+        </div>
+        <div class="Buttons">
+            <div class="buttonheader">
+
+            </div>
+            <div class="slotQ">
+                <div class="Qslots" style="margin-left: 10%;">
+                    
+                    <div class="Qtimestamp" id="tq1">
+
+                    </div>
+                    <div class="Qslot" id="q1" >
+                        
+                    </div>
+                    
+                    <div class="digitQ" id="dq1" >
+                        
+                    </div>
+                    <div class="rewQ" id="rq1" >
+                        
+                    </div>
+                </div>
+                
+                <div class="Qslots">
+                    
+                    <div class="Qtimestamp" id="tq2">
+                            
+                    </div>
+                    <div class="Qslot" id="q2" >
+                        
+                    </div>
+                    
+                    <div class="digitQ" id="dq2" >
+                        
+                    </div>
+                    <div class="rewQ" id="rq2" >
+                        
+                    </div>
+                </div>
+                <div class="Qslots">
+                    
+                    <div class="Qtimestamp" id="tq3">
+                            
+                    </div>
+                    <div class="Qslot" id="q3" >
+                        
+                    </div>
+                    
+                    <div class="digitQ" id="dq3" >
+                        
+                    </div>
+                    <div class="rewQ" id="rq3" >
+                        
+                    </div>
+                </div>
+                <div class="Qslots">
+                    
+                    <div class="Qtimestamp" id="tq4">
+                            
+                    </div>
+                    <div class="Qslot" id="q4" >
+                        
+                    </div>
+                    
+                    <div class="digitQ" id="dq4" >
+                        
+                    </div>
+                    <div class="rewQ" id="rq4" >
+                        
+                    </div>
+                </div>
+                <div class="Qslots">
+                    
+                    <div class="Qtimestamp" id="tq5">
+                            
+                    </div>
+                    <div class="Qslot" id="q5" >
+                        
+                    </div>
+                    
+                    <div class="digitQ" id="dq5" >
+                        
+                    </div>
+                    <div class="rewQ" id="rq5" >
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="AllOButton">
+            <div class="layer1">
+                <div class="buttonbox">
+                    <div class="a1" >
+                        <!-- style="width:45%; height:45%;bottom: 30px; top: 20px; text-align: center; font-size: 50px;" -->
+                        <!-- style="width:50%; height:50%; top:40px; bottom:10px; left:60px; font-size:30px" -->
+                        <button class="Option_button" id="p1">
+                            <div class="buttonlabel">🍉
+                                <div class="digit_text" >
+                                1
+                                </div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    <div class="b1">
+                        <div id="d1" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x1"></button>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a1">
+                        <button class="Option_button" id="p2">
+                            <div class="buttonlabel">🍗
+                                <div class="digit_text" >
+                                2
+                                </div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    <div class="b1">
+                        <div id="d2" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x2"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a1">
+                        <button class="Option_button" id="p3">
+                            <div class="buttonlabel">🍭
+                                <div class="digit_text" >
+                                3
+                                </div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    <div class="b1">
+                        <div id="d3" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x3"></button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="buttonbox">
+                    <div class="a1">
+                        <button class="Option_button" id="p4">
+                            <div class="buttonlabel">🍆
+                                <div class="digit_text" >
+                                4
+                                </div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    <div class="b1">
+                        <div id="d4" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x4"></button>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+            
+            
+            <div class="layer2">
+                <div class="buttonbox">
+                    <div class="a2">
+                        <button class="Option_button" id="p5">
+                            <div class="buttonlabel">🍊
+                                <div class="digit_text" >
+                                5
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="b2">
+                        <div id="d5" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x5"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a2">
+                        <button class="Option_button" id="p6">
+                            <div class="buttonlabel">⚔️
+                                <div class="digit_text" >
+                                6
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="b2">
+                        <div id="d6" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x6"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a2">
+                        <button class="Option_button" id="p7">
+                            <div class="buttonlabel">🍹
+                                <div class="digit_text" >
+                                7
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="b2">
+                        <div id="d7" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x7"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a2">
+                        <button class="Option_button" id="p8">
+                            <div class="buttonlabel">🌽
+                                <div class="digit_text" >
+                                8
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="b2">
+                        <div id="d8" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x8"></button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="layer3">
+                <div class="buttonbox">
+                    <div class="a3">
+                        <button class="Option_button" id="p9">
+                            <div class="buttonlabel">🍿
+                                <div class="digit_text" >
+                                9
+                                </div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    <div class="b3">
+                        <div id="d9" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x9"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a3">
+                        <button class="Option_button" id="p10">
+                            <div class="buttonlabel">🧨
+                                <div class="digit_text" >
+                                10
+                                </div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    <div class="b3">
+                        <div id="d10" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x10"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a3">
+                        <button class="Option_button" id="p11">
+                            <div class="buttonlabel">☀️
+                                <div class="digit_text" >
+                                11
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="b3">
+                        <div id="d11" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x11"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonbox">
+                    <div class="a3">
+                        <button class="Option_button" id="p12">
+                            <div class="buttonlabel">🍠
+                                <div class="digit_text" >
+                                12
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="b3">
+                        <div id="d12" class="labeldiv">
+    
+                        </div>
+                        <div>
+                            <button class="Option_Cancel" id="x12"></button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        <div class="RestButton">
+            <div class="addbuttondiv">
+                <button class="add_button" id="ba1">Add</button>
+            </div>
+
+            <div class="reportbuttondiv">
+                <button class="report_button" id="ba2">Report</button>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+    </body>
+    <script src="Button_Controller.js"></script>
+</html>
