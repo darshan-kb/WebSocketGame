@@ -827,12 +827,9 @@ const items = [
     //console.log(ticket.ticketID);
     let str1 = ""+ticket.ticketID;
     let str2="";
-    for(var i=0;i<ticket.ticketdata.length;i+=2){
-      if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0&&i==ticket.ticketdata.length-1){
-        str2+= (i+1)+" : "+ticket.ticketdata[i]+"\n";
-      }
-      else if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0){
-        str2+= (i+1)+" : "+ticket.ticketdata[i]+"  "+(i+2)+" : "+ticket.ticketdata[i+1]+"\n";
+    for(var i=0;i<ticket.ticketdata.length;i++){
+      if(ticket.ticketdata[i]!=null && ticket.ticketdata[i]!=0){
+        str2+= (i+1)+" : "+ticket.ticketdata[i]+",";
       }
     }
 

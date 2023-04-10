@@ -123,11 +123,9 @@ websocket.on("request", request=>{
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
             console.log(data);
-            //let pdata = tpdata.preprocessdata(data);
             db.balancecheck(data, request.clientID).then(function(amt){
                 if(amt!=-1){
-                    let ticketID = Date.now();
-                    db.addticket(apl.all_db_ticket_payload(request.clientID,ticketID,data),gameID);
+                    const ticketID=db.addticket(request.clientID,data,gameID);
                     tpdata.addData(data,allDataN);
                     console.log(allDataN);
                     ticketpayload = apl.ticket_response_payload(ticketID,data,amt);
@@ -186,17 +184,19 @@ websocket.on("request", request=>{
 
 
 countDown();
-function countDown(){
+function  countDown(){
     addflag=true;
     //spin=-1;
     //count=60;
-    var x = setInterval(function(){
+    var x = setInterval(async function(){
         //console.log(connections);
         //gameID will be generated once the game is started
         if(count==process.env.COUNTDOWN_TIME){
             clearData();
-            gameID = uuid.generateUUID();
+            // gameID = uuid.generateUUID();
+            gameID = await db.generateGameID();
             GAME_TIMESTAMP = new Date();
+            console.log(apl.game_start_data(gameID,slot1,slot2,GAME_TIMESTAMP));
             db.addgame(apl.game_start_data(gameID,slot1,slot2,GAME_TIMESTAMP));
             
             //game.insertOne(apl.game_start_data(gameID,slot1,slot2));

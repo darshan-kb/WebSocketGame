@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const ticketModel = require("../model/ticketModel");
 const user = require("../model/User");
+const sequence = require("../model/Sequence");
+const apl = require("../services/allpayload.js");
 
 const connectDB = async() => {
     try{
@@ -16,14 +18,28 @@ const connectDB = async() => {
     }
 };
 
-async function addticket(ticket,gameID){
+async function addticket(clientID,data,gameID){
     try{
-        console.log("ticket from here");
+        const sequenceDoc = await sequence.findOneAndUpdate({_id:"ticket"},{$inc:{sequencevalue:1}},{returnOrigin:false, writeConcern:{w:"majority"}});
+        console.log(typeof sequenceDoc.sequencevalue);
+        const ticket=apl.all_db_ticket_payload(clientID,sequenceDoc.sequencevalue,data);
         console.log(ticket);
         let tempgame = await ticketModel.findOneAndUpdate({gameID:gameID}, {$push : {ticket:ticket}});
-        // tempgame.ticket.push(ticket);
-        // tempgame.save(done);
+        
         console.log("ticket added!!");
+        return sequenceDoc.sequencevalue;
+        
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+async function generateGameID(){
+    try{
+        const sequenceDoc = await sequence.findOneAndUpdate({_id:process.env.GAME_VALUE},{$inc:{sequencevalue:1}},{returnOrigin:false, writeConcern:{w:"majority"}});
+        console.log("GameID : "+sequenceDoc.sequencevalue);
+        return sequenceDoc.sequencevalue;
     }
     catch(err){
 
@@ -32,8 +48,9 @@ async function addticket(ticket,gameID){
 
 async function addgame(payload){
     try{
-        const data = new ticketModel(payload);
-        const savedata = await data.save();
+        const data = await ticketModel.create(payload);
+        //const data = new ticketModel(payload);
+        //const savedata = await data.save();
 
         if(savedata){
             console.log("datasaved successfully");
@@ -155,7 +172,7 @@ async function finddata(){
         let todaytickets = [];
         for(var i of todaydata){
             for(var j=i.ticket.length-1;j>=0;j--){
-                todaytickets.push({ticket: i.ticket[j], timestamp:i.timestamp, slot1:i.slot1, slot2:i.slot2});
+                todaytickets.push({ticket: i.ticket[j], timestamp:i.timestamp, slot1:i.slot1, slot2:i.slot2, client:i.ticket[j].clientID});
             }
         }
         return todaytickets;
@@ -192,3 +209,4 @@ module.exports.rechargebalance = rechargebalance;
 module.exports.update_total_sum_reward = update_total_sum_reward;
 module.exports.updatebalance = updatebalance;
 module.exports.findprofitdata = findprofitdata;
+module.exports.generateGameID = generateGameID;
