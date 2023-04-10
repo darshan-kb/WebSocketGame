@@ -48,6 +48,7 @@
     height: 100%;
    /* background-color: burlywood;*/
    /* background-color: #BC10FF; */
+   /* background-image: linear-gradient(to right top, #5836b1, #5e3ebd, #6547c9, #6b4fd6, #7158e2, #7959e7, #815bec, #895cf1, #9555ef, #a04cec, #ab42e8, #b636e4); */
    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
    /* background-image: linear-gradient(to right, #ffffff, #c5d5e8, #74b3c5, #199188, #046a38); */
     align-content: center;

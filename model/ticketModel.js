@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ticketSchema = mongoose.Schema({
     gameID:{
-        type: String,
+        type: Number,
         require:true
     },
     slot1:{
@@ -26,7 +26,7 @@ const ticketSchema = mongoose.Schema({
     ticket:{
         type:[{
             clientID: {type: String},
-            ticketID: {type: String},
+            ticketID: {type: Number},
             ticketdata: {type: Array},
             dateandtime: {type: Date, default: Date.now}
         }]
