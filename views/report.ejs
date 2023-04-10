@@ -19,6 +19,7 @@
                     <tr>
                         <th style="font-size: medium;"> Ticket ID</th>
                         <th style="font-size: medium;"> Time</th>
+                        <th style="font-size: medium;"> ClientID</th>
                         
                         <%for(var i=1;i<=12;i++){%>
                             <th style="font-size: medium;"> <%= items[i-1] +" "+i  %> </th>
@@ -29,6 +30,7 @@
                         <tr>
                             <td><%= result[i].ticket.ticketID %></td>
                             <td><%= result[i].timestamp.getHours() + ":" + result[i].timestamp.getMinutes()%></td>
+                            <td><%= result[i].client %></td>
                                 <% let sum=0;
                                 for(var j=0; j< 12;j++){
                                     

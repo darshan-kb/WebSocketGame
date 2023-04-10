@@ -155,7 +155,7 @@ async function finddata(){
         let todaytickets = [];
         for(var i of todaydata){
             for(var j=i.ticket.length-1;j>=0;j--){
-                todaytickets.push({ticket: i.ticket[j], timestamp:i.timestamp, slot1:i.slot1, slot2:i.slot2});
+                todaytickets.push({ticket: i.ticket[j], timestamp:i.timestamp, slot1:i.slot1, slot2:i.slot2, client:i.ticket[j].clientID});
             }
         }
         return todaytickets;
