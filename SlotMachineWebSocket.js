@@ -123,9 +123,9 @@ websocket.on("request", request=>{
         if(request.method === "AddData" && count>=10){         //Bet amount adding to the array
             let data = request.dataArr;
             console.log(data);
-            db.balancecheck(data, request.clientID).then(function(amt){
+            db.balancecheck(data, request.clientID).then(async function(amt){
                 if(amt!=-1){
-                    const ticketID=db.addticket(request.clientID,data,gameID);
+                    const ticketID= await db.addticket(request.clientID,data,gameID);
                     tpdata.addData(data,allDataN);
                     console.log(allDataN);
                     ticketpayload = apl.ticket_response_payload(ticketID,data,amt);
