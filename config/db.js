@@ -46,6 +46,20 @@ async function generateGameID(){
     }
 }
 
+async function updateAllDataArray(gameID,arr){
+    try{
+        const data = await ticketModel.findOne({gameID:gameId});
+        let dataarr = data.gameArray;
+        for(let i=0;i<9;i++){
+            dataarr[i] += arr[i];
+        }
+        await ticketModel.findOneAndUpdate({gameID:gameID},{$set : {gameArray:dataarr}});
+    }
+    catch(err){
+
+    }
+}
+
 async function addgame(payload){
     try{
         const data = await ticketModel.create(payload);
