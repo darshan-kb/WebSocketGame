@@ -18,13 +18,19 @@ const connectDB = async() => {
     }
 };
 
-async function addticket(clientID,data,gameID){
+async function addticket(clientID,arr,gameID){
     try{
         const sequenceDoc = await sequence.findOneAndUpdate({_id:"ticket"},{$inc:{sequencevalue:1}},{returnOrigin:false, writeConcern:{w:"majority"}});
         console.log(typeof sequenceDoc.sequencevalue);
-        const ticket=apl.all_db_ticket_payload(clientID,sequenceDoc.sequencevalue,data);
+        const ticket=apl.all_db_ticket_payload(clientID,sequenceDoc.sequencevalue,arr);
         console.log(ticket);
-        let tempgame = await ticketModel.findOneAndUpdate({gameID:gameID}, {$push : {ticket:ticket}});
+        const data = await ticketModel.findOne({gameID:gameID});
+        let dataarr = data.gameArray;
+        for(let i=0;i<12;i++){
+            dataarr[i] += arr[i];
+        }
+
+        await ticketModel.findOneAndUpdate({gameID:gameID}, {$push : {ticket:ticket}, $set : {gameArray : dataarr}});
         
         console.log("ticket added!!");
         return sequenceDoc.sequencevalue;
@@ -32,6 +38,21 @@ async function addticket(clientID,data,gameID){
     }
     catch(err){
         console.log(err)
+    }
+}
+
+async function getDataArray(gameID){
+    try{
+        const data = await ticketModel.findOne({gameID:gameID});
+        let dataarr=[];
+        //console.log(data.gameArray)
+        for(let i=0;i<12;i++){
+            dataarr[i] = parseInt(data.gameArray[i]);
+        }
+        return dataarr;
+    }
+    catch(err){
+
     }
 }
 
@@ -77,6 +98,7 @@ async function addgame(payload){
 
 async function updateresult(gameID, slot1, slot2){
     try{
+        console.log(slot1);
         await ticketModel.findOneAndUpdate({gameID:gameID}, {$set : {slot1:slot1, slot2:slot2}});
     }
     catch(err){
@@ -167,6 +189,7 @@ async function updatebalance(slot1,slot2,gameID){
         //console.log(users);
         for(let ind of Object.keys(users)){
             let val = users[ind];
+            console.log(val);
             await user.findOneAndUpdate({email:ind},{$inc:{balance:val}});
         }
 
@@ -224,3 +247,5 @@ module.exports.update_total_sum_reward = update_total_sum_reward;
 module.exports.updatebalance = updatebalance;
 module.exports.findprofitdata = findprofitdata;
 module.exports.generateGameID = generateGameID;
+module.exports.updateAllDataArray = updateAllDataArray;
+module.exports.getDataArray = getDataArray;

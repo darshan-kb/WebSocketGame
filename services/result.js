@@ -1,6 +1,7 @@
 const apl = require("./allpayload.js");
 const payloadsend = require("./payloadsend.js");
 const db = require("../config/db");
+const tpdata = require("../services/tempdata.js");
 
 function shuffle(a) {
     var j, x, i;
@@ -17,12 +18,17 @@ function shuffle(a) {
 module.exports = class result { 
 
 
-    static resultSend(allDataN,con,gameID){              //sending the result of the current game
+    static async resultSend(con,gameID){              //sending the result of the current game
+        
+        let dataArray = await db.getDataArray(gameID);
+        let allDataN = tpdata.addData(dataArray);
+        //console.log(allDataN);
+        //console.log(dataArray);
         let tmp = [];
         let c=0;
         let sum = 0;
         for(let i=0;i<12;i++){
-            sum+=Math.floor(allDataN[i]/10);
+            sum+=Math.floor(dataArray[i]);
         }
 
         for(let i=0;i<36;i++){
@@ -69,7 +75,7 @@ module.exports = class result {
         for(let i=0;i<36;i++){
             allDataN[i]=0;
         }
-        return allDataN
+        return allDataN;
     }
     
     
