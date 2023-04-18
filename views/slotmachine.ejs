@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src="jquery-3.6.4.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles.css">
         <title>slot machine</title>
@@ -35,6 +36,8 @@
                   </div>
                 </div>
             </div>
+
+            <div class="drawgap"></div>
 
             <div class="drawclose" id="drawclosed">
 
@@ -633,7 +636,7 @@ function updatebalance(bal){
 function drawclose(){
   let draw = document.getElementById("drawclosed");
   draw.innerHTML = "DRAW CLOSED!";
-  let cout = 5;
+  let cout = 9;
   const setInt = setInterval(function(){
     if(cout<=0){
       draw.innerHTML="";

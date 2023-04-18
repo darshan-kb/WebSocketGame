@@ -62,7 +62,7 @@ const clientarry=[];
 const websocket = new webSocketServer({ //It takes the JSON. 
     "httpServer" : httpserver           //we have to pass httpserver object to it. Its just the handshake part. httpserver has the socket for the TCP connection
 })
-let allDataN = [];
+//let allDataN = [];
 
 let res1 = [];
 let res2 = [];
@@ -126,8 +126,8 @@ websocket.on("request", request=>{
             db.balancecheck(data, request.clientID).then(async function(amt){
                 if(amt!=-1){
                     const ticketID= await db.addticket(request.clientID,data,gameID);
-                    tpdata.addData(data,allDataN);
-                    console.log(allDataN);
+                    //tpdata.addData(data,allDataN);
+                    //console.log(allDataN);
                     ticketpayload = apl.ticket_response_payload(ticketID,data,amt);
                     payloadsend.findConnectionAndSend(request.clientID, ticketpayload,connections);
                 }
@@ -215,7 +215,7 @@ function  countDown(){
         count-=1;
 
         if(count == -1){              //when countdown is equal to 0 send the result to the client, equal to will avoid sending the result again and again
-            const res = result.resultSend(allDataN,connections,gameID);
+            const res = await result.resultSend(connections,gameID);
             res1 = res.res1;
             res2 = res.res2;
             slot1 = res.slot1;
@@ -229,6 +229,7 @@ function  countDown(){
             db.updatebalance(slot1,slot2,gameID).then(function(users){
                 for(let user of Object.keys(users)){
                     db.initbalancecheck(user).then(function(amt){
+                        //console.log(amt);
                         payloadsend.findConnectionAndSend(user, apl.balance_check_payload(amt),connections);
                     });
                 }
@@ -244,9 +245,9 @@ function  countDown(){
 
 
 function clearData(){
-    for(let i=0;i<36;i++){
-        allDataN[i]=0;
-    }
+    // for(let i=0;i<36;i++){
+    //     allDataN[i]=0;
+    // }
     slot1=-1;
     slot2=-1;
 }
