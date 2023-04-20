@@ -4,65 +4,82 @@
     <head>
         <link href="/style.css" rel="stylesheet" type="text/css">
         <title>Admin</title>
+        <style>
+
+body {font-family: 'Quicksand', sans-serif;}
+.content{
+    height:80%;
+    width: 100%;
+}
+.tab {
+  overflow: hidden;
+  height:10vw;
+  /* border: 1px solid #ccc;
+  background-color: #f1f1f1; */
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  /* padding: 14px 16px; */
+  transition: 0.3s;
+  font-size: 1.5vw;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  /* padding: 6px 12px; */
+  
+}
+        </style>
     </head>
     <body>
-        <%- include('partials/header'); -%>
-        <form>
-            <h2>Recharge</h2>
-            <div class="recharge_status"></div>
-            <label>Users
-                    <select id="users">
-                        <option></option>
-                        <%for(let i=0;i<users.length;i++){%>
-                            <!-- <label><%=users[i]%></label> -->
-                            <option value=<%=users[i]%>><%=users[i]%></option>
-                        <%}%>
-                    </select>
-                <label>Recharge amount
-                    <select id="recharge_amount">
-                        <option></option>
-                        <%for(let i=0;i<recharge.length;i++){%>
-                            <option value=<%=recharge[i]%>><%=recharge[i]%></option>
-                        <%}%>
-                    </select>
-            <button>Recharge</button>
-        </form>
+        
+
+        <div class="tab">
+            <button class="tablinks" onclick="displayContent(event, 'recharge')">Recharge</button>
+            <button class="tablinks" onclick="displayContent(event, 'profitreport')">profitreport</button>
+            <button class="tablinks" onclick="displayContent(event, 'fixedresult')">fixedresult</button>
+          </div>
+        <div class="tabcontent" id="recharge">
+            <%- include('recharge'); -%>
+        </div>
+        <div class="tabcontent" id="profitreport">
+            <%- include('profitreport'); -%>
+        </div>
+        <div class="tabcontent" id="fixedresult">
+            <%- include('fixedresult'); -%>
+        </div>
     </body>
     <script>
-        const form = document.querySelector("form");
-        const status = document.querySelector('.recharge_status');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            var e = document.getElementById("users");
-            const email = e.value;
-
-            var f = document.getElementById("recharge_amount");
-            const amt = f.value;
-
-
-            try{
-                const res = await fetch('/admin',{
-                    method: 'POST',
-                    body: JSON.stringify({ email, amt}),
-                    headers: { 'content-Type': 'application/json'}
-                });
-                const data = await res.json();
-                console.log(data);
-                status.textContent = "Recharge "+data.status;
-                // if(data.errors){
-                //     emailError.textContent = data.errors.email;
-                //     passwordError.textContent = data.errors.password;
-                // }
-                // if(data.user){
-                //     location.assign('/')
-                // }
-
+        function displayContent(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
-            catch(err){
-                console.log(err);
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
-        })
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
     </script>
 </html>
 

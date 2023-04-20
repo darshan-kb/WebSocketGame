@@ -3,6 +3,7 @@ const User = require("../model/User.js");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../services/sendEmail.js");
 const crypto = require('crypto');
+const game = require('../SlotMachineWebSocket.js');
 
 
 const handleErrors = (err) => {
@@ -128,25 +129,72 @@ module.exports.slotmachine = (req, res) => {
     res.render('slotmachine');
 }
 
+module.exports.fixedresult_get = (req, res) => {
+    res.render('fixedresult');
+}
+
+module.exports.fixedresult_post = (req, res) => {
+    console.log(req.body);
+        let slot1 = parseInt(req.body.slot1);
+        let slot2 = parseInt(req.body.slot2);
+        const reqbody = {slot1:slot1,slot2:slot2};
+        const det = game.basicdetails();
+        if(det.count >=0 && det.count<9){
+            db.changeResult(reqbody,det.gameID).then((obj)=>{
+                if(obj){
+                    res.status(200).json({status:"changed successfully"});
+                }
+                else{
+                    res.status(400).json({status:"failed"});
+                }
+            });
+        }
+        else{
+            res.status(400).json({status:"Wait for the draw close"});
+        }
+}
+
 module.exports.admin_get = (req, res) => {
     db.findalluser().then(
     (data) => {
         console.log(data);
-        res.render('admin',{users: data, recharge: recharge});
+        res.render('admin',{users: data.users, recharge: recharge,result: data.result});
     });
 }
 
 module.exports.admin_post = (req, res) => {
     console.log(req.body);
 
-    db.rechargebalance(req.body).then((obj)=>{
-        if(obj){
-            res.status(200).json({status:"successfull"});
+    if(req.body.method == "recharge"){
+        
+        db.rechargebalance(req.body).then((obj)=>{
+            if(obj){
+                res.status(200).json({status:"successfull"});
+            }
+            else{
+                res.status(400).json({status:"failed"});
+            }
+        })
+    }
+
+    if(req.body.method == "fixedresult"){
+        const det = game.basicdetails();
+        if(det.count >=0 && det.count<9){
+            db.changeResult(req.body,det.gameID).then((obj)=>{
+                if(obj){
+                    res.status(200).json({status:"changed successfully"});
+                }
+                else{
+                    res.status(400).json({status:"failed"});
+                }
+            });
         }
         else{
-            res.status(400).json({status:"failed"});
+            res.status(400).json({status:"Wait for the draw close"});
         }
-    }) 
+        
+    }
+     
 }
 
 module.exports.forgotpassword_get = (req, res) => {

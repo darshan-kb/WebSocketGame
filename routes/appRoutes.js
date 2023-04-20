@@ -10,6 +10,8 @@ router.get('/signup',adminCheck, authController.signup_get);
 router.post('/signup',adminCheck, authController.signup_post);
 router.get('/admin', adminCheck, authController.admin_get);
 router.post('/admin', adminCheck, authController.admin_post);
+router.get('/fixedresult', adminCheck, authController.fixedresult_get);
+router.post('/fixedresult', adminCheck, authController.fixedresult_post);
 router.get('/login', loggedIn, authController.login_get);
 router.post('/login', loggedIn, authController.login_post);
 router.get('/slotmachine', requireAuth, authController.slotmachine);
