@@ -69,21 +69,31 @@
     text-align: center;
     font-family: 'Quicksand', sans-serif;
 }
-.drawclose{
-    margin-left: 1vw;
+.drawgap{
     width :26vw;
     height:3vw;
+}
+.drawclose{
+    margin-left: 1vw;
+    margin-top:4vw;
+    width :26vw;
+    height:7vw;
     /* padding: 1.4vw 0; */
     margin-top: 3vw;
     /* background-color: #fafafa; 
     border: 10px solid #6f0499; */
-    font-size: 2vw;
+    font-size: 3vw;
     color: white;
     text-align: center;
     font-family: 'Quicksand', sans-serif;
-    font-weight: 900;
+    font-weight: 800;
+    animation: blinker 1s linear infinite;
+    
     /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
 }
+@keyframes blinker {  
+    50% { opacity: 0; }
+  }
 .Reels_Heading{
     float:none;
     display: flex;
@@ -448,5 +458,8 @@ box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
     font-family: 'Quicksand', sans-serif;
     border-radius: 1.5vw;
     background: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+    
 }
+
+
 

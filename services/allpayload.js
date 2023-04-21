@@ -72,6 +72,7 @@ module.exports = class AllPayload{
     static game_start_data(gameID,slot1,slot2,timestamp){
         const GameStartData = {
             "gameID" : gameID,
+            "gameArray":[0,0,0,0,0,0,0,0,0,0,0,0],
             "slot1" : slot1,
             "slot2" : slot2,
             "timestamp": timestamp,

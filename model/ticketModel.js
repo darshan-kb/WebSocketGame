@@ -5,6 +5,9 @@ const ticketSchema = mongoose.Schema({
         type: Number,
         require:true
     },
+    gameArray:{
+        type:[Number]
+    },
     slot1:{
         type:Number
     },
