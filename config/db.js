@@ -110,7 +110,7 @@ async function findalluser(){
         for(let i of data){
             users.push(i.email);
         }
-        let pr = findprofitdata();
+        const pr = await findprofitdata();
         const adminpayload={
             result : pr,
             users : users

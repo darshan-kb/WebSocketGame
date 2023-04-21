@@ -13,7 +13,7 @@ body {font-family: 'Quicksand', sans-serif;}
 }
 .tab {
   overflow: hidden;
-  height:10vw;
+  height:6vw;
   /* border: 1px solid #ccc;
   background-color: #f1f1f1; */
 }
@@ -27,7 +27,7 @@ body {font-family: 'Quicksand', sans-serif;}
   cursor: pointer;
   /* padding: 14px 16px; */
   transition: 0.3s;
-  font-size: 1.5vw;
+  font-size: 1.2vw;
 }
 
 /* Change background color of buttons on hover */
@@ -55,6 +55,7 @@ body {font-family: 'Quicksand', sans-serif;}
             <button class="tablinks" onclick="displayContent(event, 'recharge')">Recharge</button>
             <button class="tablinks" onclick="displayContent(event, 'profitreport')">profitreport</button>
             <button class="tablinks" onclick="displayContent(event, 'fixedresult')">fixedresult</button>
+            <div class="homebutton" style="text-align: right;"><a href="/" styles="font-size:40px">🏠</a></div>
           </div>
         <div class="tabcontent" id="recharge">
             <%- include('recharge'); -%>
@@ -67,7 +68,9 @@ body {font-family: 'Quicksand', sans-serif;}
         </div>
     </body>
     <script>
-        function displayContent(evt, cityName) {
+        async function displayContent(evt, cityName) {
+            //fetch('http://localhost:9998/admin').then(console.log("get sent"));
+            //console.log("get sent");
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -79,6 +82,7 @@ body {font-family: 'Quicksand', sans-serif;}
             }
             document.getElementById(cityName).style.display = "block";
             evt.currentTarget.className += " active";
+            
         }
     </script>
 </html>

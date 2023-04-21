@@ -2,13 +2,25 @@
     <head>
         <link href="/style.css" rel="stylesheet" type="text/css">
         <title>Admin</title>
+        <style>
+            .fixresultstyle{
+                width: 360px;
+                margin: 0 auto;
+                padding: 30px;
+                box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+                border-radius: 10px;
+                background: white;
+            }
+        </style>
     </head>
 <body>
-    <%- include('partials/header'); -%>
-<form>
-    <h2>Fix the Result</h2>
-    <div class="recharge_status"></div>
-    <label>select slot
+
+    
+    <div class="fixresultstyle">
+        <h2>Fix the Result</h2>
+        <div id="countdown"></div>
+        <div id="fixresultdiv"></div>
+        <label>select slot
             <select id="slot1">
                 <option></option>
                     <option value=0>1</option>
@@ -31,15 +43,31 @@
                 <option value=1>X2</option>
                 <option value=2>X3</option>
             </select>
-    <button>Submit</button>
-</form>
+    <button id="fixresultbutton">Submit</button>
+
+    </div>
+    
+
 </body>
 <script>
-const form = document.querySelector("form");
-const status = document.querySelector('.recharge_status');
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+const count = document.getElementById("countdown");
+var client = "<%=useremail%>";
+let ws = new WebSocket("ws://localhost:9999");
+ws.onopen = () => ws.send(JSON.stringify({"method": "open", "clientID" : client}));
+ws.onclose = () => ws.send(JSON.stringify({"clientID" : client}));
 
+ws.onmessage = message => {
+    const response = JSON.parse(message.data);
+    if(response.method == "countdown"){
+    let count = response.count;
+    countdown.innerHTML = "Countdown : "+count;
+  }
+}
+
+const fixbutton = document.getElementById("fixresultbutton");
+const fixresultdiv = document.getElementById("fixresultdiv");
+fixbutton.addEventListener('click', resultPost);
+async function resultPost(){
     var e = document.getElementById("slot1");
     const slot1 = e.value;
 
@@ -55,14 +83,18 @@ form.addEventListener('submit', async (e) => {
         });
         const data = await res.json();
         console.log(data);
-        status.textContent = data.status;
+        fixresultdiv.innerHTML = data.status;
         }
         catch(err){
             console.log(err);
         }
     }
+}
+// const form = document.querySelector("form");
+// const status = document.querySelector('.recharge_status');
+// form.addEventListener('submit', async (e) => {
+//     e.preventDefault();
 
-    
-})
+// })
 </script>
 </html>

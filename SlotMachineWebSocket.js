@@ -66,7 +66,6 @@ let allDataN = [];
 
 let res1 = [];
 let res2 = [];
-let queue = [];
 let slot1 = -1;
 let slot2 = -1;
 let gameID = null;

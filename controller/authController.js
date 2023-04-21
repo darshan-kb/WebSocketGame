@@ -120,7 +120,23 @@ module.exports.report = (req, res) => {
 module.exports.profitreport = (req, res) => {
     db.findprofitdata().then(
         (result)=>{
+            console.log(result)
             res.render('profitreport', {result: result});
+        }
+    );
+}
+
+module.exports.profitreportfetch = (req, res) => {
+    db.findprofitdata().then(
+        (result)=>{
+            console.log(result)
+            //res.render('profitreport', {result: result});
+            if(result){
+                res.status(200).json({status:"successfull", result:result});
+            }
+            else{
+                res.status(400).json({status:"failed"});
+            }
         }
     );
 }
@@ -177,23 +193,6 @@ module.exports.admin_post = (req, res) => {
         })
     }
 
-    if(req.body.method == "fixedresult"){
-        const det = game.basicdetails();
-        if(det.count >=0 && det.count<9){
-            db.changeResult(req.body,det.gameID).then((obj)=>{
-                if(obj){
-                    res.status(200).json({status:"changed successfully"});
-                }
-                else{
-                    res.status(400).json({status:"failed"});
-                }
-            });
-        }
-        else{
-            res.status(400).json({status:"Wait for the draw close"});
-        }
-        
-    }
      
 }
 
