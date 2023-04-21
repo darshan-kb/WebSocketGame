@@ -66,7 +66,6 @@ const websocket = new webSocketServer({ //It takes the JSON.
 
 let res1 = [];
 let res2 = [];
-let queue = [];
 let slot1 = -1;
 let slot2 = -1;
 let gameID = null;
@@ -102,7 +101,7 @@ websocket.on("request", request=>{
 
         if(request.method=="open"){
             connections.push(apl.con_array_payload(request.clientID, connection));
-            payloadsend.payLoadSendToAll(apl.queue_payload(queue),connections);
+            queueops.sendQueue(connections);
             connection.send(JSON.stringify(apl.init_payload(request.clientID)));
             db.initbalancecheck(request.clientID).then(function(amt){
                 
@@ -181,7 +180,9 @@ websocket.on("request", request=>{
 
 });
 
-
+function basicdetails(){
+    return {count:count, gameID:gameID};
+}
 
 countDown();
 function  countDown(){
@@ -214,19 +215,23 @@ function  countDown(){
         
         count-=1;
 
+        if(count==10){
+            await result.resultSend(allDataN,gameID);
+        }
+
         if(count == -1){              //when countdown is equal to 0 send the result to the client, equal to will avoid sending the result again and again
-            const res = await result.resultSend(connections,gameID);
+
+            const res = await result.prepareResult(gameID);
             res1 = res.res1;
             res2 = res.res2;
-            slot1 = res.slot1;
-            slot2 = res.slot2;
-            
+            await result.sendResultData(res1,res2,connections);
         }
 
         if(count===QUEUESENDTIME){              //when the spinning is over send the queue to show the updated history of results
-            queueops.sendQueue(queue,slot1,slot2,connections,GAME_TIMESTAMP);
-            db.updateresult(gameID,slot1,slot2);
-            db.updatebalance(slot1,slot2,gameID).then(function(users){
+            //db.fetchresult(gameID).then()
+            queueops.sendQueue(connections);
+            //db.updateresult(gameID,slot1,slot2);
+            db.updatebalance(gameID).then(function(users){
                 for(let user of Object.keys(users)){
                     db.initbalancecheck(user).then(function(amt){
                         //console.log(amt);
@@ -269,3 +274,6 @@ const items = [
   ];
 
 const prize=[0,10,20,30];
+
+
+module.exports.basicdetails = basicdetails;

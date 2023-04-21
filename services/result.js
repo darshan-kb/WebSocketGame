@@ -16,14 +16,8 @@ function shuffle(a) {
 
 
 module.exports = class result { 
+    static async resultSend(allDataN,gameID){              //sending the result of the current game
 
-
-    static async resultSend(con,gameID){              //sending the result of the current game
-        
-        let dataArray = await db.getDataArray(gameID);
-        let allDataN = tpdata.addData(dataArray);
-        //console.log(allDataN);
-        //console.log(dataArray);
         let tmp = [];
         let c=0;
         let sum = 0;
@@ -41,10 +35,20 @@ module.exports = class result {
         let winner = tmp[Math.floor(Math.random() * tmp.length)];
         let slot1 = winner%12;
         let slot2 = parseInt(winner/12);
-        console.log("sum = "+sum+" prize : "+allDataN[winner]);
+        await db.updateresult(gameID,slot1,slot2);
+        //console.log("sum = "+sum+" prize : "+allDataN[winner]);
+        //await db.update_total_sum_reward(sum,allDataN[winner],gameID);
+        //return this.prepareResult(slot1,slot2, gameID);
+    }
+
+    static async prepareResult(gameID){
         let res1 = [];
         let res2 = [];
-        c=0;
+        let c=0;
+        let resd = await db.fetchresult(gameID);
+        let slot1 = resd.slot1;
+        let slot2 = resd.slot2;
+
         for(let i=0;i<12;i++){
                 if(i!=slot1){
                 res1[c++] = i;
@@ -64,11 +68,14 @@ module.exports = class result {
         console.log(res1);
         console.log(res2);
 
-        db.update_total_sum_reward(sum,allDataN[winner],gameID);
+        await db.update_total_sum_reward(gameID);
 
-        payloadsend.payLoadSendToAll(apl.result_payload(res1,res2),con);
         return {"res1":res1, "res2": res2, "slot1": slot1, "slot2": slot2};
         //clearData();
+    }
+
+    static sendResultData(res1, res2, con){
+        payloadsend.payLoadSendToAll(apl.result_payload(res1,res2),con);
     }
 
     static clearData(){

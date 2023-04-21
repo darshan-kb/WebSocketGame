@@ -98,8 +98,18 @@ async function addgame(payload){
 
 async function updateresult(gameID, slot1, slot2){
     try{
-        console.log(slot1);
         await ticketModel.findOneAndUpdate({gameID:gameID}, {$set : {slot1:slot1, slot2:slot2}});
+    }
+    catch(err){
+
+    }
+}
+
+async function fetchresult(gameID){
+    try{
+        let data = await ticketModel.findOne({gameID:gameID});
+        const res = {slot1: data.slot1, slot2 : data.slot2};
+        return res;
     }
     catch(err){
 
@@ -134,7 +144,12 @@ async function findalluser(){
         for(let i of data){
             users.push(i.email);
         }
-        return users;
+        const pr = await findprofitdata();
+        const adminpayload={
+            result : pr,
+            users : users
+        }
+        return adminpayload;
     }
     catch(err){
 
@@ -154,9 +169,30 @@ async function rechargebalance(request){
     }
 }
 
-async function update_total_sum_reward(sum,reward,gameID){
+async function update_total_sum_reward(gameID){
     try{
+        const data = await ticketModel.findOne({gameID:gameID});
+        const reels = [0,0,0,0,0,0,0,0,0,0,0,0];
+        let sum=0;
+        for(let i of data.ticket){
+            let c = 0;
+            for(let j of i.ticketdata){
+                reels[c]+=j;
+                c++;
+                sum+=j;
+            }
+        }
+        const slot1 = data.slot1;
+        const slot2 = data.slot2;
+        const prize=[0,10,20,30];
+
+        const reward = reels[slot1]*prize[slot2+1];
+
+        console.log(sum+" "+ reward);
+
         await ticketModel.findOneAndUpdate({gameID:gameID},{$set:{amount:sum, reward:reward}});
+
+        return {sum:sum, reward:reward};
     }
     catch(err){
         
@@ -172,10 +208,23 @@ async function initbalancecheck(clientID){
     }
 }
 
-async function updatebalance(slot1,slot2,gameID){
+async function changeResult(req,gameID){
     try{
+        await updateresult(gameID,req.slot1, req.slot2);
+        return true;
+    }
+    catch(err){
+
+    }
+}
+
+async function updatebalance(gameID){
+    try{
+        //const d = await fetchresult(gameID);
         const data = await ticketModel.findOne({gameID:gameID});
         //console.log(data);
+        const slot1 = data.slot1;
+        const slot2 = data.slot2;
         let users=[];
         const prize=[0,10,20,30];
         for(let tic of data.ticket){
@@ -197,6 +246,16 @@ async function updatebalance(slot1,slot2,gameID){
     }
     catch(err){
         console.log(err)
+    }
+}
+
+async function findNdata(){
+    try{
+        const todaydata = await ticketModel.find().sort({timestamp:-1}).limit(5);
+        return todaydata;
+    }
+    catch(err){
+        console.log(err);
     }
 }
 
@@ -247,5 +306,7 @@ module.exports.update_total_sum_reward = update_total_sum_reward;
 module.exports.updatebalance = updatebalance;
 module.exports.findprofitdata = findprofitdata;
 module.exports.generateGameID = generateGameID;
-module.exports.updateAllDataArray = updateAllDataArray;
-module.exports.getDataArray = getDataArray;
+module.exports.fetchresult = fetchresult;
+module.exports.findNdata = findNdata;
+module.exports.changeResult = changeResult;
+

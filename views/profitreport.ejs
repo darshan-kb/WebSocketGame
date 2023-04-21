@@ -5,14 +5,24 @@
         <link href="/tablestyles.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <style>
+            .refreshbutton{
+                margin-left: 33vw;
+                margin-bottom: 3vw;
+            }
         </style>
     </head>
     <body>
         
         <div class="container">
             
-            <div class="headerdiv">
-                <h1 style="font-weight: 800;">Report</h1>
+            <!-- <div class="headerdiv">
+               
+            </div> -->
+            <div class="refreshbutton">
+                <button id="refresh" onclick="refreshfun()" >Refresh</button>
+            </div>
+            <div id="hello">
+               
             </div>
             <div class="tablediv">
                 <table class="table table-striped">
@@ -22,14 +32,29 @@
                         <th style="font-size: medium"> Reward</th>
                         <th style="font-size: medium"> Profit</th>
                     </tr>
-                    <% for(var i=0;i < result.length; i++) { %>
-                        <tr>
-                            <td><%= result[i].GameID %></td>
-                            <td><%= result[i].Amount%></td>
-                            <td><%= result[i].Reward%></td>
-                            <td style="font-weight: bold;"><%= result[i].Amount-result[i].Reward %></td>
-                       </tr>
-                    <% } %>
+                    <tr id="tablecontent0"></tr>
+                    <tr id="tablecontent1"></tr>
+                    <tr id="tablecontent2"></tr>
+                    <tr id="tablecontent3"></tr>
+                    <tr id="tablecontent4"></tr>
+                    <tr id="tablecontent5"></tr>
+                    <tr id="tablecontent6"></tr>
+                    <tr id="tablecontent7"></tr>
+                    <tr id="tablecontent8"></tr>
+                    <tr id="tablecontent9"></tr>
+                    <tr id="tablecontent10"></tr>
+                    <tr id="tablecontent11"></tr>
+                    <tr id="tablecontent12"></tr>
+                    <tr id="tablecontent13"></tr>
+                    <tr id="tablecontent14"></tr>
+                    <tr id="tablecontent15"></tr>
+                    <tr id="tablecontent16"></tr>
+                    <tr id="tablecontent17"></tr>
+                    <tr id="tablecontent18"></tr>
+                    <tr id="tablecontent19"></tr>
+                    <tr >
+                        
+                    </tr>
                     </table>
             </div>
             
@@ -46,6 +71,29 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script>
-    
+    //const reload = document.getElementById("refresh");
+    //const tc = document.getElementById("tablecontent");
+    //reload.addEventListener('click', refresh);
+    refreshfun();
+    function refreshfun(){
+        fetch('/profitreportfetch').then(response => response.json()).then(json=>{
+            let c=0;
+            let html = "";
+            console.log(json);
+            let result = json.result;
+            for(let i of result){
+                let pri = parseInt(i.Amount)-parseInt(i.Reward);
+                let gid = "<td>"+i.GameID+"</td>";
+                let amt = "<td>"+i.Amount+"</td>";
+                let rew = "<td>"+i.Reward+"</td>";
+                let prz = "<td>"+pri+"</td>";
+                let row = "<tr>"+gid+amt+rew+prz+"</tr>";
+                let tc = document.getElementById("tablecontent"+c);
+                tc.innerHTML = '';
+                tc.innerHTML = row;
+                c++;
+            }
+        });
+    }
 </script>
 </html>
