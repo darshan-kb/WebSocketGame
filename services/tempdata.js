@@ -2,17 +2,23 @@
 module.exports = class AddTempData{
     
     //Amount of money bet data add to array;
-    static addData(data,allDataN){  
+    static addData(data){  
         // let allDataN=[];
         // for(let i=0;i<27;i++){
         //     allDataN[i]=0;
-        // }                   
+        // }  
+        //console.log(data);
+        let allDataN = [];  
+        for(let i=0;i<36;i++){
+            allDataN[i]=0;
+        }               
         for(let i=0;i<12;i++){
+            //console.log(data[i]+"here");
             allDataN[i] += data[i]*10;
             allDataN[i+12] += data[i]*20;
             allDataN[i+24] += data[i]*30;
         }
-        //return allDataN;
+        return allDataN;
     }
 
     //remove the values which has 0 in it
