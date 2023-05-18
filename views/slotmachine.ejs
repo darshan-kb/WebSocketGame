@@ -135,6 +135,8 @@
                     </div>
                 </div>
             </div>
+            <div class="middiv">
+
             <div class="quickbutton">
               <div class="qbutton">
                 <button class="qb" id="evenbutn">Even</button>
@@ -150,6 +152,24 @@
               </div>
             </div>
             <div class="AllOButton">
+              <div class="layer0">
+                <div class="uval" >
+                  <button class="upperval" id="ub1">⬇️</button>
+                  
+                </div>
+                <div class="uval" >
+                  <button class="upperval" style="margin-left: 2vw;" id="ub2">⬇️</button>
+                  
+                </div>
+                <div class="uval" >
+                  <button class="upperval" style="margin-left: 1.7vw;" id="ub3">⬇️</button>
+                  
+                </div>
+                <div class="uval">
+                  <button class="upperval" style="margin-left: 1.5vw;" id="ub4">⬇️</button>
+                  
+                </div>
+              </div>
             <div class="layer1">
                 <div class="buttonbox">
                     <div class="a1" >
@@ -234,9 +254,12 @@
                             <button class="Option_Cancel" id="x4"></button>
                         </div>
                     </div>
-
+                    
                 </div>
-                
+                <div class="rval" style="float: right;">
+                  <button class="rightval" id="rb1">⬅️</button>
+                  
+                </div>
             </div>
             
             
@@ -317,7 +340,10 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="rval" style="float: right;">
+                  <button class="rightval" id="rb2">⬅️</button>
+                  
+                </div>
             </div>
             
             <div class="layer3">
@@ -398,11 +424,29 @@
                             <button class="Option_Cancel" id="x12"></button>
                         </div>
                     </div>
+                    
                 </div>
-                
+                <div class="rval" style="float: right;">
+                  <button class="rightval" id="rb3">⬅️</button>
+                  
+                </div>
             </div>
-            
-        </div>
+          </div>
+          <!-- <div class="rightbutton">
+            <div class="rval">
+              <button>⬅️</button>
+              
+            </div>
+            <div class="rval">
+              <button>⬅️</button>
+              
+            </div>
+            <div class="rval">
+              <button>⬅️</button>
+              
+            </div>
+          </div>
+        </div> -->
         <div class="values">
           <div class="val">
             <img src="../10.jpg" />
@@ -434,6 +478,7 @@
           </div>
         </div>
         
+      </div>
         <div class="RestButton">
             <div class="addbuttondiv">
                 <button class="add_button" id="ba1">Add</button>
@@ -564,6 +609,35 @@ const x12 = document.getElementById("x12");
 x12.addEventListener('click', delete_Button);
 x12.myParam = "x12";
 
+const ub1 = document.getElementById("ub1");
+ub1.addEventListener('click', upper_Button);
+ub1.myParam = "ub1";
+
+const ub2 = document.getElementById("ub2");
+ub2.addEventListener('click', upper_Button);
+ub2.myParam = "ub2";
+
+const ub3 = document.getElementById("ub3");
+ub3.addEventListener('click', upper_Button);
+ub3.myParam = "ub3";
+
+const ub4 = document.getElementById("ub4");
+ub4.addEventListener('click', upper_Button);
+ub4.myParam = "ub4";
+
+const rb1 = document.getElementById("rb1");
+rb1.addEventListener('click', right_Button);
+rb1.myParam = "rb1";
+
+const rb2 = document.getElementById("rb2");
+rb2.addEventListener('click', right_Button);
+rb2.myParam = "rb2";
+
+const rb3 = document.getElementById("rb3");
+rb3.addEventListener('click', right_Button);
+rb3.myParam = "rb3";
+
+
 //extract the button number. change the value of the button_val to index of val_arr. if same button press again increase the index
 const ev = document.getElementById("evenbutn")
 const od = document.getElementById("oddbutn");
@@ -577,6 +651,9 @@ function clear(){
     let lb_div = document.getElementById(button_div[i]);
     lb_div.innerHTML=``;
     button_val[i]=-1;
+  }
+  for(let i=0;i<12;i++){
+    points[i]=0;
   }
 }
 
@@ -617,21 +694,57 @@ function evenbutton(){
 
 
 
+function upper_Button(button_param){
+
+    u_id = button_param.currentTarget.myParam;
+    b_id = document.getElementById(u_id);
+    idx = parseInt(b_id.id.substring(2));
+    
+    
+    for(let i=0;i<3;i++){
+      let c = i*4+idx;
+      
+      button_val[c-1] = (button_val[c-1]+1)%(value_arr.length)
+      points[c-1]=value_arr[button_val[c-1]];
+      displayLabel(c-1, value_arr[button_val[c-1]]);
+      console.log(points)
+    }
+    
+}
+
+function right_Button(button_param){
+
+u_id = button_param.currentTarget.myParam;
+b_id = document.getElementById(u_id);
+idx = parseInt(b_id.id.substring(2));
+
+
+for(let i=1;i<=4;i++){
+  let c = i+(idx-1)*4;
+  
+  button_val[c-1] = (button_val[c-1]+1)%(value_arr.length)
+  points[c-1]=value_arr[button_val[c-1]];
+  displayLabel(c-1, value_arr[button_val[c-1]]);
+  //console.log(points)
+}
+
+}
+
 function option_Button(button_param){
 
-    button_id = button_param.currentTarget.myParam;
-    Option_id = document.getElementById(button_id);
-    idx = parseInt(Option_id.id.substring(1));
-    idx-=1;
+button_id = button_param.currentTarget.myParam;
+Option_id = document.getElementById(button_id);
+idx = parseInt(Option_id.id.substring(1));
+idx-=1;
+
+active_button++;
     
-    active_button++;
-        
-    //console.log("p"+idx+" is selected");
-    button_val[idx] = (button_val[idx]+1)%(value_arr.length)
-    points[idx]=value_arr[button_val[idx]];
-    //console.log(points);
-    
-    displayLabel(idx, value_arr[button_val[idx]]);
+//console.log("p"+idx+" is selected");
+button_val[idx] = (button_val[idx]+1)%(value_arr.length)
+points[idx]=value_arr[button_val[idx]];
+//console.log(points);
+
+displayLabel(idx, value_arr[button_val[idx]]);
 }
 
 function displayLabel(idx, val){
